@@ -1,3 +1,5 @@
+from collections import deque
+
 class Tree:
     """Basic structure of a Tree"""
     def __init__(self, val, left=None, right=None):
@@ -22,3 +24,31 @@ def deserialize(string):
             if kids: node.left = kids.pop()
             if kids: node.right = kids.pop()
     return root
+
+
+def print_levelorder_leetcode_style(root):
+    if not root:
+        return '[]'
+
+    stack = []
+    q = deque()
+    q.append(root)
+
+    while q:
+        root = q.popleft()
+        if not root:
+            stack.append(None)
+        else:
+            stack.append(str(root.val))
+            q.append(root.left)
+            q.append(root.right)
+        stack.append(',')
+
+    print('[', end='', flush=True)
+    for item in stack[:-1]:
+        if item is None:
+            print('null', end='', flush=True)
+        else:
+            print(item, end='', flush=True)
+    print(']', end='', flush=True)
+    print()

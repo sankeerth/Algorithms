@@ -1,6 +1,7 @@
 from collections import deque
 
-class Tree:
+
+class TreeNode:
     """Basic structure of a Tree"""
     def __init__(self, val, left=None, right=None):
         self.val = val
@@ -8,14 +9,14 @@ class Tree:
         self.right = right
 
     def __repr__(self):
-        return 'Tree({})'.format(self.val)
+        return 'TreeNode({})'.format(self.val)
 
 
 def deserialize(string):
     """This creates a tree taking list as an input and returns root of the tree"""
     if string == '{}':
         return None
-    nodes = [None if val == 'null' else Tree(int(val))
+    nodes = [None if val == 'null' else TreeNode(int(val))
              for val in string.strip('[]{}').split(',')]
     kids = nodes[::-1]
     root = kids.pop()

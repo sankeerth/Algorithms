@@ -13,4 +13,20 @@ def find_element_binary_tree(root, data):
 
     return found
 
+
+"""
+Alternative and simpler solution
+
+def find_element_binary_tree(root, data):
+    if root:
+        if root.val == data:
+            return True
+        return find(root.left, data) or find(root.right, data)
+    return False
+"""
+
+
 print(find_element_binary_tree(deserialize('[1,2,3,null,4,5,6,7,null,null,8,null,null,null,9]'), 5))
+print(find_element_binary_tree(deserialize('[1,2,3,null,4,5,6,7,null,null,8,null,null,null,9]'), 6))
+print(find_element_binary_tree(deserialize('[1,2,3,null,4,5,6,7,null,null,8,null,null,null,9]'), 10))
+print(find_element_binary_tree(deserialize('[1,2,3,null,4,5,6,7,null,null,8,null,null,null,9]'), 0))

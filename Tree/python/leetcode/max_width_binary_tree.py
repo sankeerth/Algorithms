@@ -56,6 +56,9 @@ from Tree.python.common.tree_operations import deserialize
 
 
 class Solution(object):
+    def __init__(self):
+        self.max_width = None
+
     """Returns the max width of a binary tree"""
     def widthOfBinaryTree(self, root):
         """
@@ -82,10 +85,72 @@ class Solution(object):
                 widthOfBinaryTreeRecursive(node.left, level+ 1, 2 * width - 1)
                 widthOfBinaryTreeRecursive(node.right, level + 1, 2 * width)
 
-        widthOfBinaryTreeRecursive(root, 0, 1)
+        def widthOfBinaryTreeRecursiveII(node, width):
+            """
+            This is a much simpler solution than the previous one as there is not no need for the list.
+            Logic is the same that node in each level ranges from 1 to 2^level and that is sufficient
+            to come up with a solution by having a max_val variable
+            :param node: TreeNode
+            :param width: int
+            :return: int
+            """
 
-        return self.max_width + 1
+            if node:
+                self.max_width = max(self.max_width, width)
+                widthOfBinaryTreeRecursiveII(node.left, width*2 - 1)
+                widthOfBinaryTreeRecursiveII(node.right, width*2)
+
+        def widthOfBinaryTreeIterative(node):
+            """
+            Iterative approach using level order traversal
+            :param root: TreeNode
+            :return: int
+            """
+            def calc(q):
+                l = len(q)
+                for i in range(l - 1, -1, -1):
+                    if q[i] is not None:
+                        break
+                    l -= 1
+                return l
+
+            if not node:
+                return 0
+
+            q = list()
+            q.append(node)
+            q.append('end_level')
+            max_val = 1
+
+            while q:
+                node = q.pop(0)
+                if node == 'end_level':
+                    l = calc(q)
+                    if l is 0:
+                        break
+                    max_val = max(max_val, l)
+                    q.append('end_level')
+                    continue
+                q.append(node.left if root else None)
+                q.append(node.right if root else None)
+
+            return max_val
+
+
+        # widthOfBinaryTreeRecursive(root, 0, 1)
+        # return self.max_width + 1
+
+        # return widthOfBinaryTreeIterative(root)
+
+        widthOfBinaryTreeRecursiveII(root, 1)
+        return self.max_width
+
 
 sol = Solution()
 print(sol.widthOfBinaryTree(deserialize('[1,3,2,5,3,null,9]')))
 print(sol.widthOfBinaryTree(deserialize('[1,3,2,5,null,null,9,6,null,null,7]')))
+print(sol.widthOfBinaryTree(deserialize('[1,3,2,5,3,9,null]')))
+
+
+
+

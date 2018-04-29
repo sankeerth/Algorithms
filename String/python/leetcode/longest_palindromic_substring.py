@@ -54,3 +54,35 @@ print(sol.longestPalindrome("baabad"))
 print(sol.longestPalindrome("baabaaba"))
 print(sol.longestPalindrome("baabaabaa"))
 print(sol.longestPalindrome("bdcaaa"))
+
+'''
+My Dynamic programming solution
+
+class Solution(object):
+    def longestPalindrome(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+        if not s:
+            return 0
+
+        length = len(s)
+        dp = [([False] * length) for _ in range(length)]
+
+        for i in range(length):
+            dp[i][i] = True
+
+        result = s[0]
+
+        for i in range(length-2, -1, -1):
+            for j in range(i+1, length):
+                if s[i] == s[j]:
+                    if j == i+1 or dp[i+1][j-1]:
+                        dp[i][j] = True
+                        result = s[i:j+1] if j-i+1 > len(result) else result
+                else:
+                    dp[i][j] = False
+
+        return result
+'''

@@ -32,6 +32,12 @@ class Solution:
         2. we can use the array index as the hash to restore the frequency of each number within
              the range [1,...,l+1]
         """
+        if not nums:
+            return 1
+
+        if len(nums) == 1:
+            return 2 if nums[0] == 1 else 1
+
         nums.append(0)
         n = len(nums)
         for i in range(len(nums)):  # delete those useless elements
@@ -40,12 +46,22 @@ class Solution:
         for i in range(len(nums)):  # use the index as the hash to record the frequency of each number
             nums[nums[i] % n] += n
         for i in range(1, len(nums)):
-            if nums[i] / n == 0:
+            if int(nums[i] / n) == 0:
                 return i
         return n
 
 
 sol = Solution()
-print(sol.firstMissingPositive([1, 2, 0]))
+print(sol.firstMissingPositive([1, 1, 2, 2, 2, 3]))
+print(sol.firstMissingPositive([1, 2, 0, 0, 4]))
+print(sol.firstMissingPositive([2, 2]))
+print(sol.firstMissingPositive([2, 1]))
+print(sol.firstMissingPositive([3, 1]))
+print(sol.firstMissingPositive([0, 3]))
+print(sol.firstMissingPositive([3, 1, 2]))
 print(sol.firstMissingPositive([3, 4, -1, 1]))
 print(sol.firstMissingPositive([7, 8, 9, 11, 12]))
+print(sol.firstMissingPositive([0]))
+print(sol.firstMissingPositive([1]))
+print(sol.firstMissingPositive([2]))
+print(sol.firstMissingPositive([-1]))

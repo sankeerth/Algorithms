@@ -67,3 +67,38 @@ public int minDistance(String word1, String word2) {
     return word1.length() - val + word2.length() - val;
 }
 """
+
+'''
+My dp recursive (top-down) solution:
+
+class Solution:
+    def minDistance(self, word1, word2):
+        """
+        :type word1: str
+        :type word2: str
+        :rtype: int
+        """
+
+        dp = [[float('inf')] * (len(word2)+1) for _ in range(len(word1)+1)]
+
+        def min_distance_recr(i, j):
+            if i == len(word1) and j == len(word2):
+                return 0
+            elif dp[i][j] != float('inf'):
+                return dp[i][j]
+            elif i == len(word1):
+                dp[i][j] = len(word2) - j
+                return len(word2) - j
+            elif j >= len(word2):
+                dp[i][j] = len(word1) - i
+                return len(word1) - i
+
+            if word1[i] == word2[j]:
+                dp[i][j] = min_distance_recr(i+1, j+1)
+            else:
+                dp[i][j] = min(min_distance_recr(i+1, j), min_distance_recr(i, j+1)) + 1
+
+            return dp[i][j]
+
+        return min_distance_recr(0, 0)
+'''

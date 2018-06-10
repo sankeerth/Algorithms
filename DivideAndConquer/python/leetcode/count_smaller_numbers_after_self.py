@@ -84,25 +84,35 @@ print(sol.countSmaller([2, 2, 2, 2]))
 print(sol.countSmaller([1, 2, 3, 4]))
 
 
-"""
-leetcode solution:
-def countSmaller(self, nums):
-    def sort(enum):
-        half = len(enum) / 2
-        if half:
-            left, right = sort(enum[:half]), sort(enum[half:])
-            m, n = len(left), len(right)
-            i = j = 0
-            while i < m or j < n:
-                if j == n or i < m and left[i][1] <= right[j][1]:
-                    enum[i+j] = left[i]
-                    smaller[left[i][0]] += j
-                    i += 1
-                else:
-                    enum[i+j] = right[j]
+'''
+My simpler solution:
+
+class Solution:
+    def countSmaller(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[int]
+        """
+        result = [0] * len(nums)
+        nums = list(enumerate(nums))
+
+        def count_smaller_recr(lo, hi):
+            if lo >= hi:
+                return
+
+            mid = (lo + hi) // 2
+            count_smaller_recr(lo, mid)
+            count_smaller_recr(mid+1, hi)
+
+            i, j = lo, mid+1
+            while i <= mid:
+                while j <= hi and nums[i][1] > nums[j][1]:
                     j += 1
-        return enum
-    smaller = [0] * len(nums)
-    sort(list(enumerate(nums)))
-    return smaller
-"""
+                result[nums[i][0]] += j - mid - 1
+                i += 1
+            nums[lo: hi+1] = sorted(nums[lo:hi+1], key=lambda x: x[1])
+
+        count_smaller_recr(0, len(nums)-1)
+
+        return result
+'''

@@ -34,7 +34,7 @@ class Solution(object):
                 result.append(list(current))
             else:
                 for j in range(i, l):
-                    if i ==j or is_palindrome(i, j):
+                    if i == j or is_palindrome(i, j):
                         current.append(s[i:j+1])
                         partition_recr(j+1, l)
                         current.pop()
@@ -43,5 +43,35 @@ class Solution(object):
 
         return result
 
+
 sol = Solution()
+print(sol.partition("aab"))
 print(sol.partition("aabaabd"))
+
+'''
+Refactored code:
+
+class Solution(object):
+    def partition(self, s):
+        """
+        :type s: str
+        :rtype: List[List[str]]
+        """
+        result = list()
+        current = list()
+
+        def is_palindrome(string):
+            return string == string[::-1]
+
+        def partition_recr(i):
+            if i == len(s):
+                result.append(list(current))
+            for j in range(i, len(s)):
+                if is_palindrome(s[i:j+1]):
+                    current.append(s[i:j+1])
+                    partition_recr(j+1)
+                    current.pop()
+
+        partition_recr(0)
+        return result
+'''

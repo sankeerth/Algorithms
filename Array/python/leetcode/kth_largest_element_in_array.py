@@ -32,11 +32,11 @@ class Solution:
             i, j = lo+1, hi
             pivot = nums[lo]
 
-            while True:
-                while nums[i] <= pivot and i < hi:
+            while True:  # careful here if [4,5] | lo=0, hi=1, i=1, j=1  if it was 'while i<j', swap(lo, j) => [5,4]
+                while nums[i] <= pivot and i < hi:  # careful here, missing i < hi would result it index out of bound
                     i += 1
 
-                while nums[j] >= pivot and j > lo:
+                while nums[j] >= pivot and j > lo:  # careful here, missing j > lo would end up swapping wrong number
                     j -= 1
 
                 if i >= j:

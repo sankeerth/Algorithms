@@ -1,19 +1,17 @@
 """
 2. Add Two Numbers
 
-You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
+You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order
+and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
 
 You may assume the two numbers do not contain any leading zero, except the number 0 itself.
 
 Input: (2 -> 4 -> 3) + (5 -> 6 -> 4)
 Output: 7 -> 0 -> 8
+Explanation: 342 + 465 = 807.
 """
 
-
-class ListNode(object):
-     def __init__(self, x):
-         self.val = x
-         self.next = None
+from LinkedList.python.common.linked_list_operations import ListNode, print_linked_list, build_linked_list
 
 
 class Solution(object):
@@ -34,7 +32,7 @@ class Solution(object):
             x = l1.val if l1 else 0
             y = l2.val if l2 else 0
             total = carry + x + y
-            carry = total / 10
+            carry = total // 10
             node.next = ListNode(total % 10)
             node = node.next
             l1 = l1.next if l1 else None
@@ -44,3 +42,9 @@ class Solution(object):
             node.next = ListNode(carry)
 
         return head.next
+
+
+sol = Solution()
+print_linked_list(sol.addTwoNumbers(build_linked_list([2, 4]), build_linked_list([5, 2, 3])))
+print_linked_list(sol.addTwoNumbers(build_linked_list([2, 8]), build_linked_list([5, 2, 3])))
+print_linked_list(sol.addTwoNumbers(build_linked_list([2]), build_linked_list([9])))

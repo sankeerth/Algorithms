@@ -56,6 +56,25 @@ print(s.monotoneIncreasingDigits(399443))
 
 
 """
+Leetcode discuss: Another variant of simple solution using for loop:
+
+class Solution:
+    def monotoneIncreasingDigits(self, N: int) -> int:
+        res = list(str(N))
+        index = len(res)
+
+        for i in range(len(res)-1, 0, -1):
+            if res[i-1] > res[i]:
+                index = i
+                res[i-1] = str(int(res[i-1])-1)
+
+        for i in range(index, len(res)):
+            res[i] = '9'
+
+        return int("".join(res))
+"""
+
+"""
 My solution that fails for test case: 399443
 
 class Solution:

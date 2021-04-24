@@ -22,6 +22,8 @@ class Solution:
         :type lists: List[ListNode]
         :rtype: ListNode
         """
+        # 2nd parameter in tuple is 'i' since 2nd parameter is used if 1st parameter (val) is same. If the 2nd parameter is of type ListNode,
+        # then an error is thrown since '<' (cmp) is not defined on the class.
         heap = [(lists[i].val, i, lists[i]) for i in range(len(lists)) if lists[i]]
         heapify(heap)
 

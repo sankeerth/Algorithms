@@ -22,6 +22,12 @@ Output: 1859
 Example 3:
 Input: costs = [[515,563],[451,713],[537,709],[343,819],[855,779],[457,60],[650,359],[631,42]]
 Output: 3086
+
+Constraints:
+2 * n == costs.length
+2 <= costs.length <= 100
+costs.length is even.
+1 <= aCosti, bCosti <= 1000
 """
 from typing import List
 

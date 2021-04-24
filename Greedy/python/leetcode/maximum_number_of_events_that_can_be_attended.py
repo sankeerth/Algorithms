@@ -44,7 +44,6 @@ class Solution:
         N = max(map(lambda x: x[1], events)) + 1  # return max([e[1] for e in events])
         attended = set()
         events.sort(key=lambda x: (x[1], x[1]-x[0])) # or lambda x: (x[1], x[0])
-        print(events)
         leastSpotUnattended = 1
 
         for event in events:

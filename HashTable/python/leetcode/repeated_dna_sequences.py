@@ -10,46 +10,41 @@ Given s = "AAAAACCCCCAAAAACCCCCCAAAAAGGGTTT",
 Return:
 ["AAAAACCCCC", "CCCCCAAAAA"].
 """
-from collections import deque
+from typing import List
 
 
 class Solution(object):
-    def findRepeatedDnaSequences(self, s):
-        """
-        :type s: str
-        :rtype: List[str]
-        """
-        if len(s) < 10:
-            return []
+    def findRepeatedDnaSequences(self, s: str) -> List[str]:
+        window_len = 10
+        char_code = {'A': 0, 'C': 1, 'G': 2, 'T': 3}
+        queue, res, hash_set = [], set(), set()
+        cur_hash = 0
 
-        alpha_to_code = {'A': 0, 'C': 1, 'G': 2, 'T': 3}
-        dict_dna_seq = dict()
-        dq = deque()
-        repeated_dna_seq = set()
-        sliding_window = 10
-        prev_hash = 0
+        if not s or len(s) <= window_len:
+            return res
 
-        for i in range(sliding_window):
-            dq.append(s[i])
-            prev_hash += alpha_to_code[s[i]] * (4 ** (sliding_window - i))
+        for i in range(window_len):
+            char = s[i]
+            queue.append(char)
+            cur_hash += char_code[char] * (4 ** (window_len - i))
 
-        dict_dna_seq[prev_hash] = 1
+        hash_set.add(cur_hash)
+            
+        for i in range(window_len, len(s)):
+            cur_char = s[i]
+            first_char = queue.pop(0)
+            queue.append(cur_char)
+            cur_hash -= char_code[first_char] * (4 ** (window_len))
+            cur_hash *= 4
+            cur_hash += char_code[cur_char] * 4
 
-        for i in range(sliding_window, len(s)):
-            dq.popleft()
-            dq.append(s[i])
-            curr_hash = prev_hash - (alpha_to_code[s[i - sliding_window]] * (4 ** sliding_window))
-            curr_hash *= 4
-            curr_hash += 4 * alpha_to_code[s[i]]
+            if cur_hash in hash_set:
+                res.add("".join(queue))
 
-            if curr_hash in dict_dna_seq:
-                repeated_dna_seq.add(''.join(dq))
-            else:
-                dict_dna_seq[curr_hash] = 1
+            hash_set.add(cur_hash)
 
-            prev_hash = curr_hash
+        return list(res)
 
-        return list(repeated_dna_seq)
 
 sol = Solution()
 print(sol.findRepeatedDnaSequences("AAAAACCCCCAAAAACCCCCCAAAAAGGGTTT"))

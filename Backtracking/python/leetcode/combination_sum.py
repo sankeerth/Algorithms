@@ -1,7 +1,8 @@
 """
 39. Combination Sum
 
-Given a set of candidate numbers (C) (without duplicates) and a target number (T), find all unique combinations in C where the candidate numbers sums to T.
+Given a set of candidate numbers (C) (without duplicates) and a target number (T),
+find all unique combinations in C where the candidate numbers sums to T.
 
 The same repeated number may be chosen from C unlimited number of times.
 
@@ -24,25 +25,23 @@ class Solution(object):
         :type target: int
         :rtype: List[List[int]]
         """
+        res, cur = [], []
         candidates.sort(reverse=True)
-        result = list()
-        current = list()
 
-        def combination_sum_recr(i, l, total):
+        def combinationSumRecursive(i, total):
             if total == target:
-                result.append(list(current))
-                return
-            for j in range(i, l):
-                if candidates[j] + total <= target:
-                    current.append(candidates[j])
-                    total += candidates[j]
-                    combination_sum_recr(j, l, total)
-                    current.pop()
-                    total -= candidates[j]
+                res.append(list(cur))
+            else:
+                for j in range(i, len(candidates)):
+                    if candidates[j] + total <= target:
+                        cur.append(candidates[j])
+                        combinationSumRecursive(j, total + candidates[j])
+                        cur.pop()
 
-        combination_sum_recr(0, len(candidates), 0)
+        combinationSumRecursive(0, 0)
+        return res
 
-        return result
 
 sol = Solution()
+print(sol.combinationSum([2,7,3,6], 7))
 print(sol.combinationSum([2,7,3,1], 14))

@@ -22,25 +22,19 @@ If nums = [1,2,3], a solution is:
 
 class Solution(object):
     def subsets(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: List[List[int]]
-        """
-        result = []
-        def subsetsRecursive(nums):
-            if not nums:
-                result.append([])
-                return
+        res, cur = [], []
+        nums.sort()
 
-            subsetsRecursive(nums[1:])
-            num = nums[0]
-            for i in range(len(result)):
-                newSubset = list(result[i])
-                newSubset.append(num)
-                result.append(newSubset)
+        def subsetsRecursive(i):
+            res.append(list(cur))
+            for j in range(i, len(nums)):
+                cur.append(nums[j])
+                subsetsRecursive(j+1)
+                cur.pop()
 
-        subsetsRecursive(nums[::-1])
-        return result
+        subsetsRecursive(0)
+        return res
+
 
 sol = Solution()
 print(sol.subsets([]))
@@ -92,6 +86,46 @@ class Solution(object):
 """
 
 """
+Recursive approach of the above one:
+
+class Solution(object):
+    def subsets(self, nums):
+        result = []
+        def subsetsRecursive(nums):
+            if not nums:
+                result.append([])
+                return
+
+            subsetsRecursive(nums[1:])
+            num = nums[0]
+            for i in range(len(result)):
+                newSubset = list(result[i])
+                newSubset.append(num)
+                result.append(newSubset)
+
+        subsetsRecursive(nums[::-1])
+        return result
+"""
+
+"""
+Either include the digit or not. Similar idea to the above one but in recursion and without any bitwise operation.
+
+class Solution(object):
+    def subsets(self, nums):
+        res = []
+        def subsetsRecursive(i, sub):
+            if i == len(nums):
+                res.append(sub)
+                return
+            
+            subsetsRecursive(i+1, sub)
+            subsetsRecursive(i+1, [nums[i]] + sub)
+
+        subsetsRecursive(0, [])
+        return res
+"""
+
+"""
 Leetcode discuss: Bit Manipulation
 
 This is the most clever solution that I have seen. The idea is that to give all the possible subsets,
@@ -135,22 +169,4 @@ def subsets(nums):
                 result[j].append(nums[i])
 
     return result
-"""
-
-"""
-Either include the digit or not. Similar idea to the above one but in recursion and without any bitwise operation.
-
-class Solution(object):
-    def subsets(self, nums):
-        res = []
-        def subsetsRecursive(i, sub):
-            if i == len(nums):
-                res.append(sub)
-                return
-            
-            subsetsRecursive(i+1, sub)
-            subsetsRecursive(i+1, [nums[i]] + sub)
-
-        subsetsRecursive(0, [])
-        return res
 """

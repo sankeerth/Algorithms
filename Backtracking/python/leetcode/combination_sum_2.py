@@ -15,6 +15,11 @@ A solution set is:
   [2, 6],
   [1, 1, 6]
 ]
+
+Constraints:
+1 <= candidates.length <= 100
+1 <= candidates[i] <= 50
+1 <= target <= 30
 """
 
 
@@ -25,26 +30,24 @@ class Solution(object):
         :type target: int
         :rtype: List[List[int]]
         """
-
+        res, cur = [], []
         candidates.sort(reverse=True)
-        current = list()
-        result = list()
 
-        def combination_sum2_recr(i, l, total):
+        def combinationSum2Recursive(i, total):
             if total == target:
-                result.append(list(current))
+                res.append(list(cur))
             else:
-                for j in range(i, l):
-                    if i == j or candidates[j] + total <= target and candidates[j] != candidates[j-1]:
-                        total += candidates[j]
-                        current.append(candidates[j])
-                        combination_sum2_recr(j+1, l, total)
-                        current.pop()
-                        total -= candidates[j]
+                for j in range(i, len(candidates)):
+                    if i == j or candidates[j] != candidates[j-1]:
+                        if candidates[j] + total <= target:
+                            cur.append(candidates[j])
+                            combinationSum2Recursive(j+1, total + candidates[j])
+                            cur.pop()
 
-        combination_sum2_recr(0, len(candidates), 0)
+        combinationSum2Recursive(0, 0)
+        return res
 
-        return result
 
 sol = Solution()
+print(sol.combinationSum2([10, 1, 2, 7, 6, 1, 5], 8))
 print(sol.combinationSum2([10, 1, 2, 7, 6, 1, 5], 29))

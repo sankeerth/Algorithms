@@ -2,7 +2,6 @@
 72. Edit Distance
 
 Given two words word1 and word2, find the minimum number of operations required to convert word1 to word2.
-
 You have the following 3 operations permitted on a word:
 
 Insert a character
@@ -26,16 +25,15 @@ inention -> enention (replace 'i' with 'e')
 enention -> exention (replace 'n' with 'x')
 exention -> exection (replace 'n' with 'c')
 exection -> execution (insert 'u')
+
+Constraints:
+0 <= word1.length, word2.length <= 500
+word1 and word2 consist of lowercase English letters.
 """
 
 
 class Solution:
-    def minDistance(self, word1, word2):
-        """
-        :type word1: str
-        :type word2: str
-        :rtype: int
-        """
+    def minDistance(self, word1: str, word2: str) -> int:
         dp = [[0] * (len(word1)+1) for i in range(len(word2)+1)]
 
         for i in range(len(word1)+1):
@@ -60,3 +58,33 @@ print(sol.minDistance("intention", "execution"))
 print(sol.minDistance("horse", ""))
 print(sol.minDistance("horse", "qwy"))
 print(sol.minDistance("", ""))
+
+
+"""
+Recursive solution:
+
+class Solution:
+    def minDistance(self, word1: str, word2: str) -> int:
+        memo = {}
+        def minDistanceRecursive(i, j):
+            if i == len(word1) and j == len(word2):
+                return 0
+            elif i == len(word1):
+                return len(word2)-j
+            elif j == len(word2):
+                return len(word1)-i
+            elif (i, j) in memo:
+                return memo[(i, j)]
+            else:
+                res = 0
+                if word1[i] == word2[j]:
+                    res = minDistanceRecursive(i+1, j+1)
+                else:
+                    res = min(minDistanceRecursive(i+1, j+1), \
+                        minDistanceRecursive(i, j+1), minDistanceRecursive(i+1, j)) + 1
+
+            memo[(i, j)] = res
+            return res
+        
+        return minDistanceRecursive(0, 0)
+"""

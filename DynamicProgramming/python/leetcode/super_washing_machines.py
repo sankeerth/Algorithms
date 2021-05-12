@@ -3,35 +3,32 @@
 
 You have n super washing machines on a line. Initially, each washing machine has some dresses or is empty.
 
-For each move, you could choose any m (1 ≤ m ≤ n) washing machines, and pass one dress of each washing machine to one of its adjacent washing machines at the same time .
+For each move, you could choose any m (1 ≤ m ≤ n) washing machines, and pass one dress of each 
+washing machine to one of its adjacent washing machines at the same time.
 
-Given an integer array representing the number of dresses in each washing machine from left to right on the line, you should find the minimum number of moves to make all the washing machines have the same number of dresses. If it is not possible to do it, return -1.
+Given an integer array representing the number of dresses in each washing machine from left to right on the line, 
+you should find the minimum number of moves to make all the washing machines have the same number of dresses. 
+If it is not possible to do it, return -1.
 
 Example1
 
 Input: [1,0,5]
-
 Output: 3
-
 Explanation:
 1st move:    1     0 <-- 5    =>    1     1     4
 2nd move:    1 <-- 1 <-- 4    =>    2     1     3
 3rd move:    2     1 <-- 3    =>    2     2     2
+
 Example2
-
 Input: [0,3,0]
-
 Output: 2
-
 Explanation:
 1st move:    0 <-- 3     0    =>    1     2     0
 2nd move:    1     2 --> 0    =>    1     1     1
+
 Example3
-
 Input: [0,2,0]
-
 Output: -1
-
 Explanation:
 It's impossible to make all the three washing machines have the same number of dresses.
 """
@@ -92,7 +89,72 @@ class Solution(object):
 
 
 sol = Solution()
+print(sol.findMinMoves([0, 0, 0]))
+print(sol.findMinMoves([6, 0, 0]))
+print(sol.findMinMoves([0, 0, 6]))
 print(sol.findMinMoves([1, 0, 5]))
+print(sol.findMinMoves([5, 0, 1]))
 print(sol.findMinMoves([0, 3, 0]))
 print(sol.findMinMoves([0, 2, 0]))
 print(sol.findMinMoves([4, 1, 2, 1]))
+
+"""
+My attempt using a different approach:
+Failing for (4,0,0,4)
+
+class Solution(object):
+    def findMinMoves(self, machines):
+        total = sum(machines)
+        if total % len(machines) != 0:
+            return -1
+
+        res, perMachine = 0, int(total/len(machines))
+        expectedDressFromLeft = [perMachine * (i+1) for i in range(len(machines))]
+        expectedDressFromRight = expectedDressFromLeft[::-1]
+        
+        leftPrefixSum, rightPrefixSum = [0] * len(machines), [0] * len(machines)
+        leftPrefixSum[0], rightPrefixSum[-1] = machines[0], machines[-1]
+        
+        for i in range(1, len(machines)):
+            leftPrefixSum[i] = machines[i] + leftPrefixSum[i-1]
+        for i in range(len(machines)-2, -1, -1):
+            rightPrefixSum[i] = machines[i] + rightPrefixSum[i+1]
+
+        left, right = 0, len(machines)-1
+        while right >= 0 and machines[right] == 0:
+            right -= 1
+        while left < len(machines) and machines[left] == 0:
+            left += 1
+
+        while left <= right:
+            while left < len(machines)-1 and leftPrefixSum[left] == expectedDressFromLeft[left]:
+                left += 1
+
+            while right > 0 and rightPrefixSum[right] == expectedDressFromRight[right]:
+                right -= 1
+
+            if left == right and machines[left] == perMachine:
+                break
+            
+            leftTemp, rightTemp = left, right
+            shiftLeft, shiftRight = False, False
+            while rightPrefixSum[rightTemp] > expectedDressFromRight[rightTemp] and machines[rightTemp] > 0:
+                shiftRight = True
+                rightPrefixSum[rightTemp] -= 1
+                rightTemp -= 1
+            if shiftRight:
+                machines[right] -= 1
+                machines[rightTemp] += 1
+
+            while leftPrefixSum[leftTemp] > expectedDressFromLeft[leftTemp] and machines[leftTemp] > 0:
+                shiftLeft = True
+                leftPrefixSum[leftTemp] -= 1
+                leftTemp += 1
+            if shiftLeft:
+                machines[left] -= 1
+                machines[leftTemp] += 1
+
+            res += int(shiftLeft) + int(shiftRight)
+
+        return res
+"""

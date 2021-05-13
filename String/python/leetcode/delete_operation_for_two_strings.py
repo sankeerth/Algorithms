@@ -1,23 +1,26 @@
 """
 583. Delete Operation for Two Strings
 
-Given two words word1 and word2, find the minimum number of steps required to make word1 and word2 the same, where in each step you can delete one character in either string.
+Given two strings word1 and word2, return the minimum number of steps required to make word1 and word2 the same.
+In one step, you can delete exactly one character in either string.
 
 Example 1:
-Input: "sea", "eat"
+Input: word1 = "sea", word2 = "eat"
 Output: 2
 Explanation: You need one step to make "sea" to "ea" and another step to make "eat" to "ea".
+
+Example 2:
+Input: word1 = "leetcode", word2 = "etco"
+Output: 4
+
+Constraints:
+1 <= word1.length, word2.length <= 500
+word1 and word2 consist of only lowercase English letters.
 """
 
 
 class Solution:
-    def minDistance(self, word1, word2):
-        """
-        :type word1: str
-        :type word2: str
-        :rtype: int
-        """
-
+    def minDistance(self, word1: str, word2: str) -> int:
         dp = [[0] * (len(word1)+1) for _ in range(len(word2)+1)]
 
         for i in range(len(word1) + 1):
@@ -72,33 +75,19 @@ public int minDistance(String word1, String word2) {
 My dp recursive (top-down) solution:
 
 class Solution:
-    def minDistance(self, word1, word2):
-        """
-        :type word1: str
-        :type word2: str
-        :rtype: int
-        """
-
-        dp = [[float('inf')] * (len(word2)+1) for _ in range(len(word1)+1)]
-
-        def min_distance_recr(i, j):
-            if i == len(word1) and j == len(word2):
-                return 0
-            elif dp[i][j] != float('inf'):
-                return dp[i][j]
-            elif i == len(word1):
-                dp[i][j] = len(word2) - j
-                return len(word2) - j
-            elif j >= len(word2):
-                dp[i][j] = len(word1) - i
-                return len(word1) - i
-
-            if word1[i] == word2[j]:
-                dp[i][j] = min_distance_recr(i+1, j+1)
+    def minDistance(self, word1: str, word2: str) -> int:
+        memo = {}
+        def minDistanceRecursive(i, j):
+            if i == len(word1) or j == len(word2):
+                return max(len(word1)-i, len(word2)-j)
+            elif (i, j) in memo:
+                return memo[(i, j)]
+            elif word1[i] == word2[j]:
+                memo[(i, j)] = minDistanceRecursive(i+1, j+1)
             else:
-                dp[i][j] = min(min_distance_recr(i+1, j), min_distance_recr(i, j+1)) + 1
+                memo[(i, j)] = 1 + min(minDistanceRecursive(i+1, j), minDistanceRecursive(i, j+1))
 
-            return dp[i][j]
+            return memo[(i, j)]
 
-        return min_distance_recr(0, 0)
+        return minDistanceRecursive(0, 0)
 '''

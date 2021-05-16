@@ -8,43 +8,32 @@ Given "abcabcbb", the answer is "abc", which the length is 3.
 Given "bbbbb", the answer is "b", with the length of 1.
 Given "pwwkew", the answer is "wke", with the length of 3.
 Note that the answer must be a substring, "pwke" is a subsequence and not a substring.
+
+Constraints:
+    0 <= s.length <= 5 * 104
+    s consists of English letters, digits, symbols and spaces.
 """
 from collections import deque, defaultdict
 
 
-class Solution(object):
-    def lengthOfLongestSubstring(self, s):
-        """
-        :type s: str
-        :rtype: int
-        """
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        queue, uniques = [], set()
+        res = 0
 
-        if not s:
-            return 0
-        if len(s) == 1:
-            return 1
-
-        length = len(s)
-
-        dq = deque()
-        char_dict = defaultdict(int)
-        max_length = 0
-        dq.append(s[0])
-        char_dict[s[0]] = 1
-
-        for i in range(1, length):
-            if char_dict[s[i]]:
-                while dq:
-                    c = dq.popleft()
-                    char_dict[c] = 0
-                    if c == s[i]:
+        for c in s:
+            if c in uniques:
+                while queue:
+                    top = queue.pop(0)
+                    uniques.remove(top)
+                    if top == c:
                         break
-            char_dict[s[i]] = 1
-            dq.append(s[i])
+            queue.append(c)
+            uniques.add(c)
+            res = max(res, len(queue))
 
-            max_length = max(len(dq), max_length)
+        return res
 
-        return max_length
 
 sol = Solution()
 print(sol.lengthOfLongestSubstring("pwwkew"))
@@ -69,4 +58,19 @@ int lengthOfLongestSubstring(string s) {
         }
         return maxLen;
 }
+
+Python code for the same:
+
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        occurances = {}
+        start, res = -1, 0
+
+        for i in range(len(s)):
+            if s[i] in occurances and occurances[s[i]] > start:
+                start = occurances[s[i]]
+            occurances[s[i]] = i
+            res = max(res, i - start)
+
+        return res
 """

@@ -14,36 +14,32 @@ The input string does not contain leading or trailing spaces.
 The words are always separated by a single space.
 Follow up: Could you do it in-place without allocating extra space?
 """
+from typing import List
 
 
 class Solution:
-    def reverseWords(self, s):
+    def reverseWords(self, s: List[str]) -> None:
         """
-        :type s: List[str]
-        :rtype: void Do not return anything, modify str in-place instead.
+        Do not return anything, modify s in-place instead.
         """
-        def swap(i, j):
-            temp = s[i]
-            s[i] = s[j]
-            s[j] = temp
-
         def reverse(i, j):
             while i < j:
-                swap(i, j)
+                s[i], s[j] = s[j], s[i]
                 i += 1
                 j -= 1
 
         reverse(0, len(s)-1)
-        s.append(' ')
-        j = 0
-        for i in range(len(s)):
+        i, start = 0, 0
+        while i < len(s):
             if s[i] == ' ':
-                reverse(j, i-1)
-                j = i+1
+                reverse(start, i-1)
+                start = i+1
+            i += 1
 
-        s.pop()
-        print(s)
+        reverse(start, i-1)
+        # print(s)
 
 
 sol = Solution()
 sol.reverseWords(["t","h","e"," ","s","k","y"," ","i","s"," ","b","l","u","e"])
+sol.reverseWords(["t","h","e"," ","n","e","w"," ","y","o","r","k"])

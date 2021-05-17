@@ -14,37 +14,27 @@ A partition like "ababcbacadefegde", "hijhklij" is incorrect, because it splits 
 
 
 class Solution:
-    def partitionLabels(self, S):
-        """
-        :type S: str
-        :rtype: List[int]
-        """
-        result = list()
-        char_dict = dict()
+    def partitionLabels(self, S: str) -> List[int]:
+        intervals = {}
         for i, c in enumerate(S):
-            if c in char_dict:
-                char_dict[c][1] = i
+            if c not in intervals:
+                intervals[c] = [i, i]
+            intervals[c][1] = i
+
+        sortedIntervals = sorted(intervals.values())
+        mergedIntervals = [sortedIntervals[0]]
+
+        for s, e in sortedIntervals[1:]:
+            if s < mergedIntervals[-1][1]:
+                mergedIntervals[-1][1] = max(mergedIntervals[-1][1], e)
             else:
-                char_dict[c] = [i, i]
+                mergedIntervals.append([s, e])
 
-        def merge(intervals):
-            intervals = sorted(intervals, key=lambda x: x[0])
-            result = list()
-            result.append(intervals[0])
+        res = []
+        for s, e in mergedIntervals:
+            res.append(e - s + 1)
 
-            for interval in intervals:
-                if interval[0] <= result[-1][1]:
-                    result[-1][1] = max(result[-1][1], interval[1])
-                else:
-                    result.append(interval)
-
-            return result
-
-        merged = merge(char_dict.values())
-        for m in merged:
-            result.append(m[1]-m[0]+1)
-
-        return result
+        return res
 
 
 sol = Solution()
@@ -78,4 +68,31 @@ class Solution:
             i += 1
 
         return results
+'''
+
+'''
+Slightly simpler than leetcode solution (my version):
+
+class Solution:
+    def partitionLabels(self, S):
+        result = []
+        last = {}
+
+        for i in range(len(string)-1, -1, -1):
+            if not string[i] in last:
+                last[string[i]] = i
+
+        end, span = 0, 0
+        for i, c in enumerate(string):
+            if i <= end:
+                end = max(end, last[c])
+                span += 1
+            else:
+                result.append(span)
+                end  = last[c]
+                span = 1
+                
+        result.append(span)
+
+        return result 
 '''

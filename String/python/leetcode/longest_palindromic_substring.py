@@ -1,24 +1,33 @@
 """
 5. Longest Palindromic Substring
 
-Given a string s, find the longest palindromic substring in s. You may assume that the maximum length of s is 1000.
+Given a string s, find the longest palindromic substring in s.
 
-Example:
-Input: "babad"
+Example 1:
+Input: s = "babad"
 Output: "bab"
 Note: "aba" is also a valid answer.
 
-Input: "cbbd"
+Example 2:
+Input: s = "cbbd"
 Output: "bb"
+
+Example 3:
+Input: s = "a"
+Output: "a"
+
+Example 4:
+Input: s = "ac"
+Output: "a"
+
+Constraints:
+    1 <= s.length <= 1000
+    s consist of only digits and English letters (lower-case and/or upper-case),
 """
 
 
-class Solution(object):
-    def longestPalindrome(self, s):
-        """
-        :type s: str
-        :rtype: str
-        """
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
         if not s:
             return ""
 
@@ -58,33 +67,24 @@ print(sol.longestPalindrome("bdcaaa"))
 '''
 My Dynamic programming solution
 
-class Solution(object):
-    def longestPalindrome(self, s):
-        """
-        :type s: str
-        :rtype: str
-        """
-        if not s:
-            return 0
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        dp = [[False] * len(s) for _ in range(len(s))]
+        start, end = 0, 0
 
-        length = len(s)
-        dp = [([False] * length) for _ in range(length)]
-
-        for i in range(length):
+        for i in range(len(s)):
             dp[i][i] = True
 
-        result = s[0]
-
-        for i in range(length-2, -1, -1):
-            for j in range(i+1, length):
+        for i in range(len(s)-2, -1, -1):
+            for j in range(i+1, len(s)):
                 if s[i] == s[j]:
                     if j == i+1 or dp[i+1][j-1]:
                         dp[i][j] = True
-                        result = s[i:j+1] if j-i+1 > len(result) else result
-                else:
-                    dp[i][j] = False
+                        if j-i > end-start:
+                            start, end = i, j
 
-        return result
+        res = s[start:end+1]
+        return res
 '''
 
 '''

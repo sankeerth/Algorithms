@@ -1,13 +1,25 @@
 """
 76. Minimum Window Substring
 
-Given a string S and a string T, find the minimum window in S which will contain all the characters in T in complexity O(n).
-If there is no such window in S that covers all characters in T, return the empty string "".
+Given two strings s and t of lengths m and n respectively, return the minimum window in s which will contain all the characters in t. 
+If there is no such window in s that covers all characters in t, return the empty string "".
+Note that If there is such a window, it is guaranteed that there will always be only one unique minimum window in s.
 
-Example:
-
-Input: S = "ADOBECODEBANC", T = "ABC"
+Example 1:
+Input: s = "ADOBECODEBANC", t = "ABC"
 Output: "BANC"
+
+Example 2:
+Input: s = "a", t = "a"
+Output: "a"
+
+Constraints:
+    m == s.length
+    n == t.length
+    1 <= m, n <= 105
+    s and t consist of English letters.
+
+Follow up: Could you find an algorithm that runs in O(m + n) time?
 """
 
 
@@ -15,48 +27,42 @@ from collections import Counter
 
 
 class Solution:
-    def minWindow(self, s, t):
-        """
-        :type s: str
-        :type t: str
-        :rtype: str
-        """
-        if not s:
-            return ""
-        if not t:
-            return s[0]
+    def minWindow(self, s: str, t: str) -> str:
+        counter = Counter(t)
+        res, minimum = "", float('inf')
+        start, count = 0, len(t)
+        
+        for end, c in enumerate(s):
+            if c in counter:
+                if counter[c] > 0:
+                    count -= 1
+                counter[c] -= 1
+            
+            while count == 0 and start <= end:
+                c = s[start]
+                if c in counter:
+                    counter[c] += 1
+                    if counter[c] > 0:
+                        count += 1
+                if end-start+1 < minimum:
+                    res = s[start:end+1]
+                    minimum = end-start+1
+                start += 1
 
-        char_count = Counter(t)
-        counter = len(t)
-        i, j = 0, 0
-        begin, end = 0, float('inf')
-
-        while j < len(s):
-            current = s[j]
-            if current in char_count:
-                if char_count[current] > 0:
-                    counter -= 1
-                char_count[current] -= 1
-
-            while counter == 0:
-                if end - begin > j - i:
-                    begin, end = i, j
-                current = s[i]
-                if current in char_count:
-                    char_count[current] += 1
-                    if char_count[current] > 0:
-                        counter += 1
-                i += 1
-
-            j += 1
-
-        return s[begin:end + 1] if end - begin != float('inf') else ""
+        return res
 
 
 sol = Solution()
 print(sol.minWindow("ADOBECODEBANC", "ABC"))
-print(sol.minWindow("", "ABC"))
-print(sol.minWindow("ADOBECODEBANC", ""))
+print(sol.minWindow("ACDFEBDAC", "CAB"))
+print(sol.minWindow("ACBFEBDAC", "CAB"))
+print(sol.minWindow("ACDFEBDAC", "BA"))
+print(sol.minWindow("ACBFEBDAC", "CA"))
+print(sol.minWindow("cabefgecdaecf", "cae"))
+print(sol.minWindow("aaaaaaaaaaaabbbbbcdd", "abcdd"))
+print(sol.minWindow("abdebc", "abc"))
+print(sol.minWindow("abdbbbcade", "abc"))
+print(sol.minWindow("a", "aa"))
 
 
 """

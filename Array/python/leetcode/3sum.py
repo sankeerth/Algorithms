@@ -7,20 +7,27 @@ in the array which gives the sum of zero.
 Note:
 The solution set must not contain duplicate triplets.
 
-Example:
+Example 1:
+Input: nums = [-1,0,1,2,-1,-4]
+Output: [[-1,-1,2],[-1,0,1]]
 
-Given array nums = [-1, 0, 1, 2, -1, -4],
+Example 2:
+Input: nums = []
+Output: []
 
-A solution set is:
-[
-  [-1, 0, 1],
-  [-1, -1, 2]
-]
+Example 3:
+Input: nums = [0]
+Output: []
+
+Constraints:
+0 <= nums.length <= 3000
+-105 <= nums[i] <= 105
 """
+from typing import List
 
 
 class Solution:
-    def threeSum(self, nums):
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
         """
         :type nums: List[int]
         :rtype: List[List[int]]
@@ -54,12 +61,15 @@ class Solution:
 
 
 sol = Solution()
+print(sol.threeSum([-1, -1, 2, 2, 0, 1, 1, 2, -1, -1, -4]))
+print(sol.threeSum([1, 2, 3, 4, 5, 1, 3, 4, 0, -3, -6, -4]))
 print(sol.threeSum([-1, -1, 2, 2, 0, 1, 2, -1, -4]))
 print(sol.threeSum([-1, 1, 2]))
 print(sol.threeSum([-1, 1, 0]))
 print(sol.threeSum([-1, 1]))
 print(sol.threeSum([0, 0, 0]))
 print(sol.threeSum([0, 0, 1]))
+
 
 """
 from collections import Counter
@@ -95,4 +105,39 @@ class Solution:
 
 sol = Solution()
 print(sol.threeSum([-1, 0, 1, 2, -1, -4]))
+"""
+
+
+"""
+Another solution with targetSum as a separate function, maintainable code:
+
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        res = []
+        nums.sort()
+
+        def targetSum(i, j, target):
+            while i < j:
+                s = nums[i] + nums[j]
+                if s == target:
+                    return i, j
+                elif s > target:
+                    j -= 1
+                else:
+                    i += 1
+            
+            return i, j
+
+        for i in range(len(nums)-2):
+            if i == 0 or nums[i] != nums[i-1]:
+                j, k = i+1, len(nums)-1
+                while j < k:
+                    if j == i+1 or nums[j] != nums[j-1]:
+                        l, r = targetSum(j, k, 0 - nums[i])
+                        if l < r:
+                            res.append([nums[i], nums[l], nums[r]])
+                            j, k = l, r
+                    j += 1
+
+        return res
 """

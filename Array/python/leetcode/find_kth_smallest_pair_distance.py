@@ -15,15 +15,12 @@ Here are all the pairs:
 (3,1) -> 2
 Then the 1st smallest distance pair is (1,1), and its distance is 0.
 """
+from typing import List
 
 
 class Solution:
-    def smallestDistancePair(self, nums, k):
+    def smallestDistancePair(self, nums: List[int], k: int) -> int:
         """
-        :type nums: List[int]
-        :type k: int
-        :rtype: int
-
         A simple solution for this one could be O(n^2) by finding all possible combinations.
         This code is from leetcode discuss solution:
         A key thing to note while performing binary search is to figure out "search space", which can be in the form of
@@ -60,9 +57,9 @@ class Solution:
 
 
 sol = Solution()
+print(sol.smallestDistancePair([3, 7, 9, 1, 4], 6))
+print(sol.smallestDistancePair([3, 7, 9, 1, 4], 4))
 print(sol.smallestDistancePair([1, 4, 2, 3], 6))
 print(sol.smallestDistancePair([1, 4, 2, 3], 4))
 print(sol.smallestDistancePair([1, 4, 2, 3], 2))
 print(sol.smallestDistancePair([1, 4, 2, 1], 4))
-
-

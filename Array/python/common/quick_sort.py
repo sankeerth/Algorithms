@@ -9,6 +9,9 @@ class QuickSort(object):
                 return False
         return True
 
+    def swap(self, i, j):
+        self.nums[i], self.nums[j] = self.nums[j], self.nums[i]
+
     def sort(self):
         self.performSort(0, self.length-1)
         return self.nums
@@ -32,10 +35,10 @@ class QuickSort(object):
 
             if lo > hi: # i > j
                 break
-            
-            self.nums[lo], self.nums[hi] = self.nums[hi], self.nums[lo] # swap
 
-        self.nums[pivot], self.nums[hi] = self.nums[hi], self.nums[pivot] # swap
+            self.swap(lo, hi)
+
+        self.swap(pivot, hi)
         return hi
 
     def partitionAlternate(self, lo, hi):
@@ -43,7 +46,7 @@ class QuickSort(object):
         
         while lo <= hi:
             if self.nums[hi] < self.nums[pivot] < self.nums[lo]:
-                self.nums[lo], self.nums[hi] = self.nums[hi], self.nums[lo]
+                self.swap(lo, hi)
 
             if self.nums[lo] <= self.nums[pivot]:
                 lo += 1
@@ -51,7 +54,7 @@ class QuickSort(object):
             if self.nums[hi] >= self.nums[pivot]:
                 hi -= 1
 
-        self.nums[hi], self.nums[pivot] = self.nums[pivot], self.nums[hi]
+        self.swap(pivot, hi)
         return hi
 
 

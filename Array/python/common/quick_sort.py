@@ -1,57 +1,74 @@
 class QuickSort(object):
-    def __init__(self, array):
-        self.array = array
-        self.length = len(array)
-        self.sort(0, self.length-1)
-        assert self.is_sorted()
+    def __init__(self, nums):
+        self.nums = nums
+        self.length = len(nums)
 
-    def is_sorted(self):
+    def isSorted(self):
         for i in range(1, self.length):
-            if self.array[i] < self.array[i-1]:
+            if self.nums[i] < self.nums[i-1]:
                 return False
         return True
 
-    def swap(self, i, j):
-        temp = self.array[i]
-        self.array[i] = self.array[j]
-        self.array[j] = temp
+    def sort(self):
+        self.performSort(0, self.length-1)
+        return self.nums
 
-    def sort(self, lo, hi):
+    def performSort(self, lo, hi):
         if lo >= hi:
             return
-        index = self.partition(lo, hi)
-        self.sort(lo, index-1)
-        self.sort(index+1, hi)
+        pivot = self.partition(lo, hi)
+        self.performSort(lo, pivot-1)
+        self.performSort(pivot+1, hi)
 
     def partition(self, lo, hi):
-        pivot = self.array[lo]
-        i, j = lo+1, hi
-
+        pivot = lo
+        # i, j = lo+1, hi # could use i and j as copies of lo and hi instead
         while True:
-            while self.array[i] <= pivot and i < hi:
-                i += 1
+            while lo <= hi and self.nums[lo] <= self.nums[pivot]: # i < hi
+                lo += 1
+            
+            while hi >= lo and self.nums[hi] >= self.nums[pivot]: # j > lo
+                hi -= 1
 
-            while self.array[j] >= pivot and j > lo:
-                j -= 1
-
-            if i >= j:
+            if lo > hi: # i > j
                 break
+            
+            self.nums[lo], self.nums[hi] = self.nums[hi], self.nums[lo] # swap
 
-            self.swap(i, j)
+        self.nums[pivot], self.nums[hi] = self.nums[hi], self.nums[pivot] # swap
+        return hi
 
-        self.swap(lo, j)
+    def partitionAlternate(self, lo, hi):
+        pivot, lo = lo, lo+1
+        
+        while lo <= hi:
+            if self.nums[hi] < self.nums[pivot] < self.nums[lo]:
+                self.nums[lo], self.nums[hi] = self.nums[hi], self.nums[lo]
 
-        return j
+            if self.nums[lo] <= self.nums[pivot]:
+                lo += 1
+
+            if self.nums[hi] >= self.nums[pivot]:
+                hi -= 1
+
+        self.nums[hi], self.nums[pivot] = self.nums[pivot], self.nums[hi]
+        return hi
 
 
-quick_sort = QuickSort([10, 12, 9, 6, 3, 7, 8])
-print(quick_sort.array)
+qs = QuickSort([10, 12, 9, 6, 3, 7, 8])
+print(qs.sort())
 
-quick_sort = QuickSort([1, 0, 1, 0, 0, 0, 1])
-print(quick_sort.array)
+qs = QuickSort([1, 0, 1, 0, 0, 0, 1])
+print(qs.sort())
 
-quick_sort = QuickSort([1, 1, 1, 1, 1])
-print(quick_sort.array)
+qs = QuickSort([2, 2, 2, 2, 2])
+print(qs.sort())
 
-quick_sort = QuickSort([1, 1, 1, 1, 0])
-print(quick_sort.array)
+qs = QuickSort([2, 0, 2, 0, 0, 1, 2])
+print(qs.sort())
+
+qs = QuickSort([5, 4, 3, 2, 1])
+print(qs.sort())
+
+qs = QuickSort([1, 2, 3, 4, 5])
+print(qs.sort())

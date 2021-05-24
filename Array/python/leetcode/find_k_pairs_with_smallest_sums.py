@@ -57,6 +57,12 @@ print(sol.kSmallestPairs([1,1,2], [1,2,3], 10))
 
 
 """
+O(k) 'complicated solution' when you have time:
+
+https://leetcode.com/problems/find-k-pairs-with-smallest-sums/discuss/84577/ok-solution
+"""
+
+"""
 Leetcode discuss solution:
 
 The previous solution right away considered (the first pair of) all matrix rows 

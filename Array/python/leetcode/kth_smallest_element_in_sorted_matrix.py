@@ -162,4 +162,26 @@ class Solution:
                 end = smaller  # search lower
 
         return start
+
+Complexity Analysis
+
+Time Complexity: O(N×log(Max−Min))
+
+Let's think about the time complexity in terms of the normal binary search algorithm. 
+For a one-dimensional binary search over an array with NN elements, the complexity comes out to be O(log(N)).
+
+For our scenario, we are kind of defining our binary search space in terms of the minimum and the maximum numbers in the array. 
+Going by this idea, the complexity for our binary search should be O(log(Max−Min)) 
+where Max is the maximum element in the array and likewise, Min is the minimum element.
+
+However, we update our search space after each iteration. So, even if the maximum element is super large as compared to the remaining 
+elements in the matrix, we will bring down the search space considerably in the next iterations. But, going purely by the extremes 
+for our search space, the complexity of our binary search in search of Kth smallest element will be O(log(Max−Min)).
+
+In each iteration of our binary search approach, we iterate over the matrix trying to determine the size of the left-half 
+as explained before. That takes O(N).
+
+Thus, the overall time complexity is O(N×log(Max−Min))
+
+Space Complexity: O(1)O(1) since we don't use any additional space for performing our binary search.
 """

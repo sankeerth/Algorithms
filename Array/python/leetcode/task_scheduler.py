@@ -31,35 +31,78 @@ Can be solved in two other ways :
 2. Use Min Heap to get the max count and append to task list and heapify at the end of each interval
 """
 
+class Solution:
+    def leastInterval(self, tasks: List[str], n: int) -> int:
+        if n == 0:
+            return len(tasks)
 
-class Solution(object):
-    def leastInterval(self, tasks, n):
-        if not tasks:
-            return 0
+        counter = Counter(tasks)
+        values = list(counter.values())
+        maxInterval = max(values)
+        countOfMaxOccurrances = values.count(maxInterval)
 
-        task_count = defaultdict(int)
-        for task in tasks:
-            task_count[task] += 1
+        minRequired = maxInterval + n * (maxInterval - 1)
+        while countOfMaxOccurrances > 1:
+            minRequired += 1
+            countOfMaxOccurrances -= 1
 
-        sorted_tasks = sorted(task_count.items(), key=lambda x: x[1])
+        total = max(minRequired, len(tasks))
+        return total
 
-        c = sorted_tasks.pop()[1]
-        max_req_for_task = ((c - 1) * (n + 1)) + 1
-        total_count = max_req_for_task
-        current_count = c
-
-        while sorted_tasks:
-            task = sorted_tasks.pop()
-            task_count = task[1]
-            req = ((task_count - 1) * (n + 1)) + 1
-            if req == max_req_for_task:
-                total_count += 1
-            current_count += task_count
-
-        return max(current_count, total_count)
 
 sol = Solution()
 print(sol.leastInterval(["A","A","A","D","D","D","B","B","B","C","C","C","D","D","D"], 4))
 print(sol.leastInterval(["A","A","A","B","B","B"], 2))
 print(sol.leastInterval(["A","A","A","A","A","A","A","A","D","D","D","D","D","D","D","D","B","B","B","B","B","B","B","B","C","C","C","C","C","C","C"]
 , 3))
+
+"""
+Leetcode solution, Greedy:
+
+class Solution:
+    def leastInterval(self, tasks: List[str], n: int) -> int:
+        # frequencies of the tasks
+        frequencies = [0] * 26
+        for t in tasks:
+            frequencies[ord(t) - ord('A')] += 1
+        
+        frequencies.sort()
+
+        # max frequency
+        f_max = frequencies.pop()
+        idle_time = (f_max - 1) * n
+        
+        while frequencies and idle_time > 0:
+            idle_time -= min(f_max - 1, frequencies.pop())
+        idle_time = max(0, idle_time)
+
+        return idle_time + len(tasks)
+"""
+
+"""
+Leetcode solution, Math:
+
+Algorithm
+
+The maximum number of tasks is 26. Let's allocate an array frequencies of 26 elements to keep the frequency of each task.
+Iterate over the input array and store the frequency of task A at index 0, the frequency of task B at index 1, etc.
+Find the maximum frequency: f_max = max(frequencies).
+Find the number of tasks which have the max frequency: n_max = frequencies.count(f_max).
+If the number of slots to use is defined by the most frequent task, it's equal to (f_max - 1) * (n + 1) + n_max.
+Otherwise, the number of slots to use is defined by the overall number of tasks: len(tasks).
+Return the maximum of these two: max(len(tasks), (f_max - 1) * (n + 1) + n_max).
+
+class Solution:
+    def leastInterval(self, tasks: List[str], n: int) -> int:
+        # frequencies of the tasks
+        frequencies = [0] * 26
+        for t in tasks:
+            frequencies[ord(t) - ord('A')] += 1
+
+        # max frequency
+        f_max = max(frequencies)
+        # count the most frequent tasks
+        n_max = frequencies.count(f_max)
+
+        return max(len(tasks), (f_max - 1) * (n + 1) + n_max)
+"""

@@ -4,20 +4,24 @@
 Given an unsorted array of integers, find the length of the longest consecutive elements sequence.
 Your algorithm should run in O(n) complexity.
 
-Example:
-
-Input: [100, 4, 200, 1, 3, 2]
+Example 1:
+Input: nums = [100,4,200,1,3,2]
 Output: 4
 Explanation: The longest consecutive elements sequence is [1, 2, 3, 4]. Therefore its length is 4.
+
+Example 2:
+Input: nums = [0,3,7,2,5,8,4,6,0,1]
+Output: 9
+
+Constraints:
+0 <= nums.length <= 105
+-109 <= nums[i] <= 109
 """
+from typing import List
 
 
-class Solution(object):
-    def longestConsecutive(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
+class Solution:
+    def longestConsecutive(self, nums: List[int]) -> int:
         num_set = set(nums)
         visited = {num: False for num in nums}
         result = 0
@@ -50,11 +54,12 @@ print(sol.longestConsecutive([100, 200, 1, 5, 3]))
 print(sol.longestConsecutive([100, 200, 1, 5, 2]))
 print(sol.longestConsecutive([]))
 
-'''
-My other solution:
 
-class Solution(object):
-    def longestConsecutive(self, nums):
+"""
+Similar to leetcode solution that counts up for the least number in consecutive sequence:
+
+class Solution:
+    def longestConsecutive(self, nums: List[int]) -> int:
         nums = set(nums)
         best = 0
         for x in nums:
@@ -64,4 +69,33 @@ class Solution(object):
                     y += 1
                 best = max(best, y - x)
         return best
-'''
+"""
+
+"""
+O(n) solution recursive:
+
+class Solution:
+    def longestConsecutive(self, nums: List[int]) -> int:
+        countIntegersBelowItself = {}
+        for num in nums:
+            if num not in countIntegersBelowItself:
+                countIntegersBelowItself[num] = 0
+
+        def longestConsecutiveRecursive(num):
+            if countIntegersBelowItself[num] != 0:
+                return countIntegersBelowItself[num]
+
+            count = 1
+            if num-1 in countIntegersBelowItself:
+                count = longestConsecutiveRecursive(num-1) + 1
+
+            countIntegersBelowItself[num] = count
+            return count
+
+        res = 0
+        for num in nums:
+            count = longestConsecutiveRecursive(num)
+            res = max(res, count)
+
+        return res
+"""

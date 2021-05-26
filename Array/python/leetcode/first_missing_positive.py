@@ -22,10 +22,8 @@ Your algorithm should run in O(n) time and uses constant extra space.
 
 
 class Solution:
-    def firstMissingPositive(self, nums):
+    def firstMissingPositive(self, nums: List[int]) -> int:
         """
-        :type nums: List[int]
-        :rtype: int
          Basic idea:
         1. for any array whose length is l, the first missing positive must be in range [1,...,l+1],
             so we only have to care about those elements in this range and remove the rest.
@@ -65,3 +63,38 @@ print(sol.firstMissingPositive([0]))
 print(sol.firstMissingPositive([1]))
 print(sol.firstMissingPositive([2]))
 print(sol.firstMissingPositive([-1]))
+
+
+"""
+My O(n) solution with in place modification:
+
+Convert all numbers < 0 and > len to 1
+Append 1 to end of list to take care of the integer equal to len
+Negate the numbers to indicate the presence of a positive integer
+
+class Solution:
+    def firstMissingPositive(self, nums: List[int]) -> int:
+        res, isOne = 1, False
+        
+        for i in range(len(nums)):
+            if nums[i] == 1:
+                isOne = True
+            if nums[i] <= 0:
+                nums[i] = 1
+
+        if not isOne:
+            return res
+
+        nums.append(1)
+        for i in range(len(nums)):
+            index = abs(nums[i])
+            if index < len(nums) and nums[index] > 0:
+                nums[index] *= -1
+
+        while res < len(nums):
+            if nums[res] > 0:
+                return res
+            res += 1
+
+        return res
+"""

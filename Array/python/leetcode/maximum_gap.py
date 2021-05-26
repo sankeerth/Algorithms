@@ -17,7 +17,7 @@ Input: [10]
 Output: 0
 Explanation: The array contains less than 2 elements, therefore return 0.
 """
-from math import ceil
+from typing import List
 
 
 class Solution(object):
@@ -30,11 +30,7 @@ class Solution(object):
     We only need to store the largest number and the smallest number in each bucket.
     After we put all the numbers into the buckets. We can scan the buckets sequentially and get the max gap.
     """
-    def maximumGap(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
+    def maximumGap(self, nums: List[int]) -> int:
         length = len(nums)
         if length < 2:
             return 0

@@ -64,15 +64,15 @@ class Solution(object):
         return ans
         
 
-s = Solution()
-print(s.subarraysWithKDistinct([1,1,1,2], 2))
-print(s.subarraysWithKDistinct([1,2,1,2,3], 2))
-print(s.subarraysWithKDistinct([1,2,1,2], 2))
-print(s.subarraysWithKDistinct([1,1,1,2,2], 2))
-print(s.subarraysWithKDistinct([1,1,1,2,2], 1))
-print(s.subarraysWithKDistinct([1,1,1,2,2], 3))
-print(s.subarraysWithKDistinct([1,2,1,2,1,2,3,4], 2))
-print(s.subarraysWithKDistinct([1,2,1,2,1,2,3,4], 3))
+sol = Solution()
+print(sol.subarraysWithKDistinct([1,1,1,2], 2))
+print(sol.subarraysWithKDistinct([1,2,1,2,3], 2))
+print(sol.subarraysWithKDistinct([1,2,1,2], 2))
+print(sol.subarraysWithKDistinct([1,1,1,2,2], 2))
+print(sol.subarraysWithKDistinct([1,1,1,2,2], 1))
+print(sol.subarraysWithKDistinct([1,1,1,2,2], 3))
+print(sol.subarraysWithKDistinct([1,2,1,2,1,2,3,4], 2))
+print(sol.subarraysWithKDistinct([1,2,1,2,1,2,3,4], 3))
 
 
 """

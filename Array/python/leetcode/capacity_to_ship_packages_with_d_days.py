@@ -114,3 +114,36 @@ Here are some similar binary search problems:
 774. Minimize Max Distance to Gas Station
 410. Split Array Largest Sum
 """
+
+"""
+My DP recursive solution that gives TLE:
+
+class Solution:
+    def shipWithinDays(self, weights: List[int], days: int) -> int:
+        weightSum = sum(weights)
+        minCapacity = ceil(weightSum / days)
+        prefixSum = [0] * (len(weights)+1)
+        dp = {}
+        for i in range(1, len(weights)+1):
+            prefixSum[i] = prefixSum[i-1] + weights[i-1]
+
+        def shipWithinDaysRecursive(i, days):
+            if days == 1:
+                return prefixSum[len(weights)] - prefixSum[i]
+            
+            if (i, days) in dp:
+                return dp[(i, days)]
+
+            res = float('inf')
+            for j in range(i+1, len(weights)-days+2):
+                capacity = prefixSum[j] - prefixSum[i]
+                if capacity <= minCapacity * 2:
+                    ret = shipWithinDaysRecursive(j, days-1)
+                    res = min(res, (max(capacity, ret)))
+
+            dp[(i, days)] = res
+            return res
+
+        res = shipWithinDaysRecursive(0, days)
+        return res if res != float('inf') else max(weights)
+"""

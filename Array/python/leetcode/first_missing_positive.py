@@ -19,6 +19,7 @@ Note:
 
 Your algorithm should run in O(n) time and uses constant extra space.
 """
+from typing import List
 
 
 class Solution:

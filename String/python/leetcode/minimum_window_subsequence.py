@@ -21,6 +21,8 @@ Constraints:
 1 <= s2.length <= 100
 s1 and s2 consist of lowercase English letters.
 """
+
+
 class Solution:
     def minWindow(self, s1: str, s2: str) -> str:
         dp = [[float('inf')] * len(s1) for _ in range(len(s2))]

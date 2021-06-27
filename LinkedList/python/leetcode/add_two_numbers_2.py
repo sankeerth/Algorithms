@@ -6,25 +6,30 @@ and each of their nodes contain a single digit. Add the two numbers and return i
 
 You may assume the two numbers do not contain any leading zero, except the number 0 itself.
 
-Follow up:
-What if you cannot modify the input lists? In other words, reversing the lists is not allowed.
+Example 1:
+Input: l1 = [7,2,4,3], l2 = [5,6,4]
+Output: [7,8,0,7]
 
-Example:
+Example 2:
+Input: l1 = [2,4,3], l2 = [5,6,4]
+Output: [8,0,7]
 
-Input: (7 -> 2 -> 4 -> 3) + (5 -> 6 -> 4)
-Output: 7 -> 8 -> 0 -> 7
+Example 3:
+Input: l1 = [0], l2 = [0]
+Output: [0]
+
+Constraints:
+    The number of nodes in each linked list is in the range [1, 100].
+    0 <= Node.val <= 9
+    It is guaranteed that the list represents a number that does not have leading zeros.
+
+Follow up: Could you solve it without reversing the input lists?
 """
-
 from LinkedList.python.common.linked_list_operations import ListNode, print_linked_list, build_linked_list
 
 
 class Solution(object):
-    def addTwoNumbers(self, l1, l2):
-        """
-        :type l1: ListNode
-        :type l2: ListNode
-        :rtype: ListNode
-        """
+    def addTwoNumbers(self, l1: ListNode, l2: ListNode):
         stack1 = list()
         stack2 = list()
 

@@ -6,21 +6,29 @@ and each of their nodes contain a single digit. Add the two numbers and return i
 
 You may assume the two numbers do not contain any leading zero, except the number 0 itself.
 
-Input: (2 -> 4 -> 3) + (5 -> 6 -> 4)
-Output: 7 -> 0 -> 8
+Example 1:
+Input: l1 = [2,4,3], l2 = [5,6,4]
+Output: [7,0,8]
 Explanation: 342 + 465 = 807.
-"""
 
+Example 2:
+Input: l1 = [0], l2 = [0]
+Output: [0]
+
+Example 3:
+Input: l1 = [9,9,9,9,9,9,9], l2 = [9,9,9,9]
+Output: [8,9,9,9,0,0,0,1]
+
+Constraints:
+    The number of nodes in each linked list is in the range [1, 100].
+    0 <= Node.val <= 9
+    It is guaranteed that the list represents a number that does not have leading zeros.
+"""
 from LinkedList.python.common.linked_list_operations import ListNode, print_linked_list, build_linked_list
 
 
 class Solution(object):
-    def addTwoNumbers(self, l1, l2):
-        """
-        :type l1: ListNode
-        :type l2: ListNode
-        :rtype: ListNode
-        """
+    def addTwoNumbers(self, l1: ListNode, l2: ListNode):
         if not l1 and not l2:
             return None
 
@@ -33,6 +41,7 @@ class Solution(object):
             y = l2.val if l2 else 0
             total = carry + x + y
             carry = total // 10
+
             node.next = ListNode(total % 10)
             node = node.next
             l1 = l1.next if l1 else None

@@ -4,59 +4,57 @@
 Given a string containing just the characters '(' and ')', find the length of the longest valid (well-formed) parentheses substring.
 
 Example 1:
-
 Input: "(()"
 Output: 2
 Explanation: The longest valid parentheses substring is "()"
-Example 2:
 
+Example 2:
 Input: ")()())"
 Output: 4
 Explanation: The longest valid parentheses substring is "()()"
+
+Example 3:
+Input: s = ""
+Output: 0
+
+Constraints:
+    0 <= s.length <= 3 * 104
+    s[i] is '(', or ')'.
 """
 
 
 class Solution:
-    def longestValidParentheses(self, s):
-        """
-        :type s: str
-        :rtype: int
-        """
-        result = 0
-
-        # forwards
-        i, j = 0, 0
-        current_sum = 0
-
-        while i < len(s) and j < len(s):
-            current_sum = current_sum + 1 if s[j] == '(' else current_sum - 1
-            if current_sum < 0:
-                i = j + 1
-                j = i
-                current_sum = 0
-            elif current_sum == 0:
-                result = max(result, j-i+1)
-                j += 1
+    def longestValidParentheses(self, s: str) -> int:
+        res = 0
+        
+        open, close, left = 0, 0, 0
+        for right, c in enumerate(s):
+            if c == ')':
+                if close < open:
+                    close += 1
+                else:
+                    left = right+1
             else:
-                j += 1
+                open += 1
+            
+            if open == close:
+                res = max(res, right-left+1)
 
-        # backwards
-        i, j = len(s)-1, len(s)-1
-        current_sum = 0
-
-        while i > 0 and j > 0:
-            current_sum = current_sum + 1 if s[j] == '(' else current_sum - 1
-            if current_sum > 0:
-                i = i - 1
-                j = i
-                current_sum = 0
-            elif current_sum == 0:
-                result = max(result, i-j+1)
-                j -= 1
+        open, close, right = 0, 0, len(s)-1
+        for left in range(len(s)-1, -1, -1):
+            c = s[left]
+            if c == '(':
+                if open < close:
+                    open += 1
+                else:
+                    right = left-1
             else:
-                j -= 1
+                close += 1
 
-        return result
+            if open == close:
+                res = max(res, right-left+1)
+        
+        return res
 
 
 sol = Solution()
@@ -70,15 +68,11 @@ print(sol.longestValidParentheses(")"))
 print(sol.longestValidParentheses(""))
 
 
-'''
-My other simpler solution by using the same code but reversing the strings:
+"""
+My other solution using the same code but reversing the strings:
 
 class Solution:
-    def longestValidParentheses(self, s):
-        """
-        :type s: str
-        :rtype: int
-        """
+    def longestValidParentheses(self, s: str) -> int:
         result = 0
         if not s:
             return 0
@@ -103,4 +97,4 @@ class Solution:
         longest_valid_parantheses(s[::-1], [')', '('])
 
         return result
-'''
+"""

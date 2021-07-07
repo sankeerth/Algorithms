@@ -29,27 +29,27 @@ Input: s = "(a(b(c)d)"
 Output: "a(b(c)d)"
 """
 
+
 class Solution:
     def minRemoveToMakeValid(self, s: str) -> str:
-        paran_to_remove = []
-        result = []
+        res, paranToRemove = [], []
 
         for i, c in enumerate(s):
             if c == '(':
-                paran_to_remove.append((c, i))
+                paranToRemove.append((c, i))
             elif c == ')':
-                if paran_to_remove and paran_to_remove[-1][0] == '(':
-                    paran_to_remove.pop()
+                if paranToRemove and paranToRemove[-1][0] == '(':
+                    paranToRemove.pop()
                 else:
-                    paran_to_remove.append((c, i))
+                    paranToRemove.append((c, i))
 
         start = 0
-        for paran in paran_to_remove:
-            result.append(s[start: paran[1]])
-            start = paran[1] + 1
-        result.append(s[start:])
+        for _, i in paranToRemove:
+            res.append(s[start:i])
+            start = i + 1
+        res.append(s[start:])
 
-        return "".join(result)
+        return "".join(res)
 
 
 s = Solution()
@@ -58,28 +58,28 @@ print(s.minRemoveToMakeValid("a(b(c)d)"))
 print(s.minRemoveToMakeValid("))(("))
 print(s.minRemoveToMakeValid("a)b(c)d"))
 
+
 """
 Leetcode solution: Two pass but a different variant where string is parsed from left to right
 to remove invalid ')' and parsed from right to left to remove invalid '('.
 
 class Solution:
-    def minRemoveToMakeValid(self, s: str) -> str:
-
-        def delete_invalid_closing(string, open_symbol, close_symbol):
-            sb = []
-            balance = 0
+    def minRemoveToMakeValid(self, s: str) -> str:        
+        def removeInvalid(string, openP, closeP):
+            res = []
+            count = 0
             for c in string:
-                if c == open_symbol:
-                    balance += 1
-                if c == close_symbol:
-                    if balance == 0:
+                if c == openP:
+                    count += 1
+                elif c == closeP:
+                    if count == 0:
                         continue
-                    balance -= 1
-                sb.append(c)
-            return "".join(sb)
-
-        # Note that s[::-1] gets the reverse of s.
-        s = delete_invalid_closing(s, "(", ")")
-        s = delete_invalid_closing(s[::-1], ")", "(")
-        return s[::-1]
+                    count -= 1
+                res.append(c)
+            
+            return "".join(res)
+        
+        res = removeInvalid(s, '(', ')')
+        res = removeInvalid(res[::-1], ')', '(')
+        return res[::-1]
 """

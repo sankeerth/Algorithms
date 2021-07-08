@@ -3,8 +3,7 @@
 
 Given a binary tree, imagine yourself standing on the right side of it, return the values of the nodes you can see ordered from top to bottom.
 
-Example:
-
+Example 1:
 Input: [1,2,3,null,5,null,4]
 Output: [1, 3, 4]
 Explanation:
@@ -14,27 +13,37 @@ Explanation:
 2     3         <---
  \     \
   5     4       <---
+
+Example 2:
+Input: root = [1,null,3]
+Output: [1,3]
+
+Example 3:
+Input: root = []
+Output: []
+
+Constraints:
+The number of nodes in the tree is in the range [0, 100].
+-100 <= Node.val <= 100
 """
-from Tree.python.common.tree_operations import deserialize
+from typing import List
+from Tree.python.common.tree_operations import deserialize, TreeNode
 
 
 class Solution:
-    def rightSideView(self, root):
-        """
-        :type root: TreeNode
-        :rtype: List[int]
-        """
-        result = list()
+    def rightSideView(self, root: TreeNode) -> List[int]:
+        levels = list()
 
-        def preorder_from_right(root, level):
+        def rightSideView(root, level):
             if root:
-                if len(result) <= level:
-                    result.append(root.val)
-                preorder_from_right(root.right, level+1)
-                preorder_from_right(root.left, level+1)
-
-        preorder_from_right(root, 0)
-        return result
+                if level >= len(levels):
+                    levels.append(root.val)
+                
+                rightSideView(root.right, level+1)
+                rightSideView(root.left, level+1)                
+        
+        rightSideView(root, 0)
+        return levels
 
 
 sol = Solution()

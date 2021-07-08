@@ -56,8 +56,7 @@ class BSTIterator(object):
         return False
 
     def next(self) -> int:
-        top = self.stack[-1]
-        self.stack.pop()
+        top = self.stack.pop()
         self.traverse_left_until_left(top.right)
         return top.val
 

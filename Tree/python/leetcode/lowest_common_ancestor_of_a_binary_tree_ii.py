@@ -37,24 +37,23 @@ class Solution:
         def lowestCommonAncestorRecursive(root):
             if not root:
                 return None
-            
+
             if root is p or root is q:
                 visited.add(root)
                 if len(visited) == 2:
                     return root
-            
+
             left = lowestCommonAncestorRecursive(root.left)
             right = lowestCommonAncestorRecursive(root.right)
-            
-            
+
             if root is p or root is q:
                 return root
             
             if left and right:
                 return root
-            
+
             return left if left else right
-        
+
         lca = lowestCommonAncestorRecursive(root)
         if len(visited) == 2:
             return lca

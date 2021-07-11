@@ -22,9 +22,13 @@ Explanation: You don't need to remove any of the intervals since they're already
 Note:
 You may assume the interval's end point is always bigger than its start point.
 Intervals like [1,2] and [2,3] have borders "touching" but they don't overlap each other.
+
+Constraints:
+1 <= intervals.length <= 2 * 104
+intervals[i].length == 2
+-2 * 104 <= starti < endi <= 2 * 104
 """
 from typing import List
-
 
 class Solution:
     def eraseOverlapIntervals(self, intervals: List[List[int]]) -> int:
@@ -33,14 +37,14 @@ class Solution:
             return res
 
         intervals.sort(key=lambda x: (x[0], x[1]))
-        prev_s, prev_e = intervals[0]
+        prev_e = intervals[0][1]
         for cur_s, cur_e in intervals[1:]:
             if cur_s < prev_e:
                 if cur_e < prev_e:
-                    prev_s, prev_e = cur_s, cur_e
+                    prev_e = cur_e
                 res += 1
             else:
-                prev_s, prev_e  = cur_s, cur_e
+                prev_e  = cur_e
 
         return res
 
@@ -51,3 +55,24 @@ print(s.eraseOverlapIntervals([[1,2],[2,3],[3,4],[1,3]]))
 print(s.eraseOverlapIntervals([[1,2],[1,2],[1,2]]))
 print(s.eraseOverlapIntervals([[1,2],[2,3]]))
 print(s.eraseOverlapIntervals([[0,4],[1,2],[2,3],[3,5]])) # imp test case
+
+
+"""
+My other solution: Sort by end interval
+
+class Solution:
+    def eraseOverlapIntervals(self, intervals: List[List[int]]) -> int:
+        res = 0
+        if not intervals:
+            return res
+
+        intervals.sort(key=lambda x: (x[1], x[0]))
+        prevEnd = intervals[0][1]
+        for start, end in intervals[1:]:
+            if start < prevEnd:
+                res += 1
+            else:
+                prevEnd = end
+
+        return res
+"""

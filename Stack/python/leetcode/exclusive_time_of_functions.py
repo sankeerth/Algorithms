@@ -92,3 +92,26 @@ print(sol.exclusiveTime(1, ["0:start:0","0:start:2","0:end:5","0:start:6","0:end
 print(sol.exclusiveTime(2, ["0:start:0","0:start:2","0:end:5","1:start:6","1:end:6","0:end:7"]))
 print(sol.exclusiveTime(2, ["0:start:0","0:start:2","0:end:5","1:start:7","1:end:7","0:end:8"]))
 print(sol.exclusiveTime(1, ["0:start:0","0:end:0"]))
+
+"""
+Leetcode discuss solution (subtracting interrupted time):
+
+class Solution:
+    def exclusiveTime(self, n: int, logs: List[str]) -> List[int]:
+        stack, res = [], [0] * n
+
+        for log in logs:
+            id, label, currentTime = log.split(':')
+            id, currentTime = int(id), int(currentTime)
+
+            if label == 'start':
+                stack.append((id, currentTime))
+            else:
+                top = stack.pop()
+                executedTime = currentTime - top[1] + 1
+                res[id] += executedTime
+                if stack:
+                    res[stack[-1][0]] -= executedTime # interrupted time
+
+        return res
+"""

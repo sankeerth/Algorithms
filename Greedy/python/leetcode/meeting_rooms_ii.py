@@ -24,15 +24,15 @@ class Solution:
         heap = []
         intervals.sort()
         heapq.heappush(heap, intervals[0][1])
-        result = 1
+        res = 1
 
         for start, end in intervals[1:]:
             while heap and start >= heap[0]:
                 heapq.heappop(heap)
             heapq.heappush(heap, end)
-            result = max(result, len(heap))
+            res = max(res, len(heap))
 
-        return result
+        return res
 
 
 s = Solution()
@@ -77,9 +77,12 @@ have to be allocated separate rooms.
 Algorithm
 
 Separate out the start times and the end times in their separate arrays.
-Sort the start times and the end times separately. Note that this will mess up the original correspondence of start times and end times. They will be treated individually now.
-We consider two pointers: s_ptr and e_ptr which refer to start pointer and end pointer. The start pointer simply iterates over all the meetings and the end pointer helps us track if a meeting has ended and if we can reuse a room.
-When considering a specific meeting pointed to by s_ptr, we check if this start timing is greater than the meeting pointed to by e_ptr. If this is the case then that would mean some meeting has ended by the time the meeting at s_ptr had to start. So we can reuse one of the rooms. Otherwise, we have to allocate a new room.
+Sort the start times and the end times separately. Note that this will mess up the original correspondence of start times and end times. 
+They will be treated individually now. We consider two pointers: s_ptr and e_ptr which refer to start pointer and end pointer. 
+The start pointer simply iterates over all the meetings and the end pointer helps us track if a meeting has ended and if we can reuse a room.
+When considering a specific meeting pointed to by s_ptr, we check if this start timing is greater than the meeting pointed to by e_ptr. 
+If this is the case then that would mean some meeting has ended by the time the meeting at s_ptr had to start. So we can reuse one of the rooms. 
+Otherwise, we have to allocate a new room.
 If a meeting has indeed ended i.e. if start[s_ptr] >= end[e_ptr], then we increment e_ptr.
 Repeat this process until s_ptr processes all of the meetings.
 

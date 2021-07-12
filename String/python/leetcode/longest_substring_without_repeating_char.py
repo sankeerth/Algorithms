@@ -43,34 +43,22 @@ print(sol.lengthOfLongestSubstring("azbckbc"))
 
 
 """
-the basic idea is, keep a hashmap which stores the characters in string as keys and their positions as values, and keep two pointers which define the max substring.
-move the right pointer to scan through the string , and meanwhile update the hashmap. If the character is already in the hashmap, then move the left pointer to the right of the same character last found.
+The basic idea is, keep a hashmap which stores the characters in string as keys and their positions as values, 
+and keep two pointers which define the max substring. Move the right pointer to scan through the string , 
+and meanwhile update the hashmap. If the character is already in the hashmap, then move the left pointer to 
+the right of the same character last found.
 Note that the two pointers can only move forward.
-
-int lengthOfLongestSubstring(string s) {
-        vector<int> dict(256, -1);
-        int maxLen = 0, start = -1;
-        for (int i = 0; i != s.length(); i++) {
-            if (dict[s[i]] > start)
-                start = dict[s[i]];
-            dict[s[i]] = i;
-            maxLen = max(maxLen, i - start);
-        }
-        return maxLen;
-}
-
-Python code for the same:
 
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
         occurances = {}
-        start, res = -1, 0
+        start, res = 0, 0
 
         for i in range(len(s)):
             if s[i] in occurances and occurances[s[i]] > start:
                 start = occurances[s[i]]
-            occurances[s[i]] = i
-            res = max(res, i - start)
+            occurances[s[i]] = i + 1
+            res = max(res, i - start + 1)
 
         return res
 """

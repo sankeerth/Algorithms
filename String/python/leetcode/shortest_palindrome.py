@@ -4,22 +4,23 @@
 Given a string S, you are allowed to convert it to a palindrome by adding characters in front of it.
 Find and return the shortest palindrome you can find by performing this transformation.
 
-For example:
-Given "aacecaaa", return "aaacecaaa".
-Given "abcd", return "dcbabcd".
-"""
+Example 1:
+Input: s = "aacecaaa"
+Output: "aaacecaaa"
 
-"""
-Leetcode solution using KMP table. See discuss for explanation.
+Example 2:
+Input: s = "abcd"
+Output: "dcbabcd"
+
+Constraints:
+0 <= s.length <= 5 * 104
+s consists of lowercase English letters only.
 """
 
 
 class Solution:
-    def shortestPalindrome(self, s):
-        """
-        :type s: str
-        :rtype: str
-        """
+    # Leetcode solution using KMP table. See discuss for explanation.
+    def shortestPalindrome(self, s: str) -> str:
         res = [0]
         def prefix(s):
             nonlocal res
@@ -41,14 +42,11 @@ print(sol.shortestPalindrome("abcd"))
 print(sol.shortestPalindrome("aacecaaa"))
 
 
-'''
+"""
 My Solution:
+
 class Solution:
-    def shortestPalindrome(self, s):
-        """
-        :type s: str
-        :rtype: str
-        """
+    def shortestPalindrome(self, s: str) -> str:
         def is_palindrome(string):
             return string == string[::-1]
         
@@ -60,4 +58,4 @@ class Solution:
             
         result = append_front + s
         return result
-'''
+"""

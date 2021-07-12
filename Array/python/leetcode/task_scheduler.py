@@ -14,24 +14,23 @@ Input: tasks = ["A","A","A","B","B","B"], n = 2
 Output: 8
 Explanation: A -> B -> idle -> A -> B -> idle -> A -> B.
 """
+from typing import List
+from collections import defaultdict, Counter
 
-from collections import defaultdict
-
-
-"""
-1. Sort the tasks
-2. Calculate the required amount of intervals for the task with max number
-3. Keep a current count and add the count of each task to it
-4. If a task has the same required amount as task with max number, increase the required amount by 1 as there are more than
-one task with max occurances
-5. Answer will be max of required amount or total count
-
-Can be solved in two other ways :
-1. Keep a bucket for each of max count and start adding chars into each bucket
-2. Use Min Heap to get the max count and append to task list and heapify at the end of each interval
-"""
 
 class Solution:
+    """
+    1. Sort the tasks
+    2. Calculate the required amount of intervals for the task with max number
+    3. Keep a current count and add the count of each task to it
+    4. If a task has the same required amount as task with max number, increase the required amount by 1 as there are more than
+    one task with max occurances
+    5. Answer will be max of required amount or total count
+
+    Can be solved in two other ways :
+    1. Keep a bucket for each of max count and start adding chars into each bucket
+    2. Use Min Heap to get the max count and append to task list and heapify at the end of each interval
+    """
     def leastInterval(self, tasks: List[str], n: int) -> int:
         if n == 0:
             return len(tasks)

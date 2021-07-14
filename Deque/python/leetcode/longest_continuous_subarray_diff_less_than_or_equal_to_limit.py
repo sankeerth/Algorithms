@@ -177,6 +177,11 @@ Here are some stack problems that impressed me.
 496. Next Greater Element I
 84. Largest Rectangle in Histogram
 42. Trapping Rain Water
+1130. Minimum Cost Tree From Leaf Values
+1776. Car Fleet II
+1673. Find the Most Competitive Subsequence
+1671. Minimum Number of Removals to Make Mountain Array
+1475. Final Prices With a Special Discount in a Shop
 """
 
 """

@@ -68,27 +68,32 @@ from typing import List
 from typing import List
 from collections import defaultdict
 
-
+# O(n) solution
 class Solution:
     def depthSumInverse(self, nestedList: List[NestedInteger]) -> int:
-        sumAtDepth = defaultdict(int)
-        res = 0
-
-        def depthRecursive(nestedList, curDepth):
-            depth = 0
-            for item in nestedList:
-                if item.isInteger():
-                    sumAtDepth[curDepth] += item.getInteger()
+        if not nestedList:
+            return 0
+        
+        maxDepth = 1
+        def depthSum(nestedList, depth=1):
+            nonlocal maxDepth
+            weightedSum, total = 0, 0
+            maxDepth = max(maxDepth, depth)
+            for ni in nestedList:
+                if ni.isInteger():
+                    total += ni.getInteger()
+                    weightedSum += depth * ni.getInteger()
                 else:
-                    depth = max(depth, depthRecursive(item.getList(), curDepth+1))
+                    w, t = depthSum(ni.getList(), depth+1)
+                    total += t
+                    weightedSum += w
             
-            return max(curDepth, depth)
+            return weightedSum, total
+        
+        weightedSum, total = depthSum(nestedList)
 
-        maxDepth = depthRecursive(nestedList, 1)
-        for depth, depthSum in sumAtDepth.items():
-            res += depthSum * (maxDepth-depth+1)
-
-        return res
+        # Sigma(maxDepth * Ni) - Sigma(weightedSum) + Sigma(Ni)
+        return total * maxDepth - weightedSum + total
 
 
 sol = Solution()

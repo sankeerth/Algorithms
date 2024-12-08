@@ -9,33 +9,32 @@ Output: ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"].
 """
 
 
-class Solution(object):
-    def letterCombinations(self, digits):
-        """
-        :type digits: str
-        :rtype: List[str]
-        """
+class Solution:
+    def letterCombinations(self, digits: str) -> List[str]:
         if not digits:
             return []
 
-        l = len(digits)
+        digitsToCharMap = {
+            "2": ['a','b','c'],
+            "3": ['d','e','f'],
+            "4": ['g','h','i'],
+            "5": ['j','k','l'],
+            "6": ['m','n','o'],
+            "7": ['p','q','r','s'],
+            "8": ['t','u','v'],
+            "9": ['w','x','y','z'],
+        }
 
-        digit_to_alpha_mapping = {"1": "*", "2": "abc", "3": "def", "4": "ghi", "5": "jkl", "6": "mno", "7": "pqrs",
-                                  "8": "tuv", "9": "wxyz", "0": " "}
+        res = [""]
+        for digit in digits:
+            temp = []
+            for r in res:
+                for char in digitsToCharMap[digit]:
+                    temp.append(r + char)
+            res = temp
 
-        result = list()
+        return res
 
-        for char in digit_to_alpha_mapping[digits[0]]:
-            result.append(char)
-
-        for index, digit in enumerate(digits[1:], start=1):
-            label = digit_to_alpha_mapping[digit]
-            while len(result[0]) == index:
-                top = result.pop(0)
-                for char in label:
-                    result.append(top + char)
-
-        return result
 
 sol = Solution()
 print(sol.letterCombinations("120"))

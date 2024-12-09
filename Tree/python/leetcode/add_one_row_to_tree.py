@@ -52,36 +52,30 @@ Output:
 from Tree.python.common.tree_operations import deserialize, TreeNode, print_levelorder_leetcode_style
 
 
-class Solution(object):
-    def addOneRow(self, root, v, d):
-        """
-        :type root: TreeNode
-        :type v: int
-        :type d: int
-        :rtype: TreeNode
-        """
-
-        def addOneRowRecursive(root, v, d, level):
-            if root:
-                if level == d - 1:
-                    node_left = TreeNode(v)
-                    node_left.left = root.left
-                    root.left = node_left
-                    node_right = TreeNode(v)
-                    node_right.right = root.right
-                    root.right = node_right
-                else:
-                    addOneRowRecursive(root.left, v, d, level + 1)
-                    addOneRowRecursive(root.right, v, d, level + 1)
-
-        if d == 1:
-            node = TreeNode(v)
-            node.left = root
-            root = node
-        else:
-            addOneRowRecursive(root, v, d, 1)
-
+class Solution:
+    def addOneRow(self, root: Optional[TreeNode], val: int, depth: int) -> Optional[TreeNode]:
+        def addOneRowRec(root, curDepth):
+            if not root:
+                return
+            
+            if curDepth == depth-1:
+                root.left = TreeNode(val, root.left, None)
+                root.right = TreeNode(val, None, root.right)
+                return
+            
+            addOneRowRec(root.left, curDepth+1)
+            addOneRowRec(root.right, curDepth+1)
+        
+        if not root:
+            return root
+        
+        if depth == 1:
+            newRoot = TreeNode(val, root, None)
+            return newRoot
+        
+        addOneRowRec(root, 1)
         return root
+
 
 sol = Solution()
 print_levelorder_leetcode_style(sol.addOneRow(deserialize('[4,2,6,3,1,5]'), 1, 2))

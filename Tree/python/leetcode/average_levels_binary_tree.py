@@ -16,6 +16,34 @@ The average value of nodes on level 0 is 3,  on level 1 is 14.5, and on level 2 
 from Tree.python.common.tree_operations import deserialize
 
 
+class Solution:
+    def averageOfLevels(self, root: Optional[TreeNode]) -> List[float]:
+        lValues, res = [], []
+        
+        def dfs(root, level):
+            if root:
+                if len(lValues) == level:
+                    lValues.append([])
+                
+                lValues[level].append(root.val)
+                
+                dfs(root.left, level+1)
+                dfs(root.right, level+1)
+
+        dfs(root, 0)
+        for values in lValues:
+            res.append(sum(values)/len(values))
+
+        return res
+
+
+sol = Solution()
+print(sol.averageOfLevels(deserialize('[3,9,20,15,7]')))
+
+
+"""
+My original solution:
+
 class Solution(object):
     def averageOfLevels(self, root):
         """
@@ -39,9 +67,8 @@ class Solution(object):
         preorder(root, 0)
 
         return [(x * 1.0) / y for x, y in zip(average, nodes_in_level)]
+"""
 
-sol = Solution()
-print(sol.averageOfLevels(deserialize('[3,9,20,15,7]')))
 
 """
 leetcode solution in discuss.

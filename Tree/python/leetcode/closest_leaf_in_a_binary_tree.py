@@ -44,13 +44,7 @@ class Solution:
             leftDepth, leftLeaf = findClosestLeafBottomUp(root.left)
             rightDepth, rightLeaf = findClosestLeafBottomUp(root.right)
 
-            depth, closestLeaf = min(leftDepth, rightDepth) + 1, 0
-            if leftDepth <= rightDepth:
-                closestLeaf = leftLeaf
-            else:
-                closestLeaf = rightLeaf
-            
-            distances[root.val] = (depth, closestLeaf)
+            distances[root.val] = (min(leftDepth, rightDepth) + 1, leftLeaf if leftDepth <= rightDepth else rightLeaf)
             return depth, closestLeaf
 
         def findClosestLeafTopDown(root, depth, closestLeafToParent):
@@ -102,7 +96,7 @@ class Solution:
         while queue:
             node = queue.pop(0)
             visited.add(node)
-            if len(graph[node]) <= 1: # covers the case with root the only node
+            if len(graph[node]) <= 1: # leaf has only one not going to parent; covers the case with root the only node
                 return node
             
             for nei in graph[node]:

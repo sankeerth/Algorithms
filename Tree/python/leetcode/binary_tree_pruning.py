@@ -50,3 +50,30 @@ sol = Solution()
 print_levelorder_leetcode_style(sol.pruneTree(deserialize('[1,null,0,0,1]')))
 print_levelorder_leetcode_style(sol.pruneTree(deserialize('[1,0,1,0,0,0,1]')))
 print_levelorder_leetcode_style(sol.pruneTree(deserialize('[1,1,0,1,1,0,1,0]')))
+
+"""
+My verbose solution:
+
+class Solution:
+    def pruneTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        def pruneTreeRec(root):
+            if not root:
+                return 0
+            
+            left = pruneTreeRec(root.left)
+            right = pruneTreeRec(root.right)
+
+            if not left:
+                root.left = None
+            if not right:
+                root.right = None
+            
+            return left or right or root.val == 1
+
+        pruneTreeRec(root)
+        
+        if not root.left and not root.right and root.val == 0:
+            return None
+        
+        return root
+"""

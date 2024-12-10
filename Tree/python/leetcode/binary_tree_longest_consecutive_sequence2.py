@@ -84,27 +84,30 @@ print(sol.longestConsecutive(deserialize("[4,3,3,4,null,null,4,5,null,3,5,null,n
 print(sol.longestConsecutive(deserialize("[2,3,3,4,null,null,4,5,null,3,5,null,null,null,null,null,6]")))
 
 
-'''
-python leetcode solution: # much simpler!
+"""
+leetcode discuss solution: # much simpler!
 
-class Solution(object):
-    def longestConsecutive(self, root):
-        """
-        :type root: TreeNode
-        :rtype: int
-        """
-        def dfs(node, parent):
-            if not node:
+class Solution:
+    def longestConsecutive(self, root: Optional[TreeNode]) -> int:
+        res = 0
+
+        def postorder(root, parent):
+            nonlocal res
+            if not root:
                 return 0, 0
-            li, ld = dfs(node.left, node)
-            ri, rd = dfs(node.right, node)
-            l[0] = max(l[0], li + rd + 1, ld + ri + 1)
-            if node.val == parent.val + 1:
-                return max(li, ri) + 1, 0
-            if node.val == parent.val - 1:
-                return 0, max(ld, rd) + 1
-            return 0, 0
-        l = [0]
-        dfs(root, root)
-        return l[0]
-'''
+            
+            leftInc, leftDec = postorder(root.left, root)
+            rightInc, rightDec = postorder(root.right, root)
+
+            res = max(res, leftInc+rightDec+1, leftDec+rightInc+1)
+            
+            if root.val == parent.val-1: # decreasing
+                return 0, max(leftDec, rightDec)+1
+            if root.val == parent.val+1: # increasing
+                return max(leftInc, rightInc)+1, 0
+            
+            return 0,0
+            
+        postorder(root, root)
+        return res 
+"""

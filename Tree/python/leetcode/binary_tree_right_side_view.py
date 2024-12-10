@@ -31,19 +31,17 @@ from Tree.python.common.tree_operations import deserialize, TreeNode
 
 
 class Solution:
-    def rightSideView(self, root: TreeNode) -> List[int]:
-        levels = list()
-
-        def rightSideView(root, level):
+    def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
+        res = []
+        def dfs(root, level):
             if root:
-                if level >= len(levels):
-                    levels.append(root.val)
-                
-                rightSideView(root.right, level+1)
-                rightSideView(root.left, level+1)                
+                if len(res) == level:
+                    res.append(root.val)
+                dfs(root.right, level+1)
+                dfs(root.left, level+1)
         
-        rightSideView(root, 0)
-        return levels
+        dfs(root, 0)
+        return res
 
 
 sol = Solution()

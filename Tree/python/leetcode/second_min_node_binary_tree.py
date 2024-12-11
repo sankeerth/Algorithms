@@ -62,18 +62,22 @@ print(sol.findSecondMinimumValue(deserialize('[2]')))
 """
 Leetcode solution:
 
-def findSecondMinimumValue(self, root):
-    self.ans = float('inf')
-    min1 = root.val
+class Solution:
+    def findSecondMinimumValue(self, root: Optional[TreeNode]) -> int:
+        res = float('inf')
+        minVal = root.val
 
-    def dfs(node):
-        if node:
-            if min1 < node.val < self.ans:
-                self.ans = node.val
-            elif node.val == min1:
-                dfs(node.left)
-                dfs(node.right)
+        def dfs(root):
+            nonlocal res, minVal
 
-    dfs(root)
-    return self.ans if self.ans < float('inf') else -1
+            if root:
+                if minVal < root.val < res:
+                    res = root.val
+                    return
+                
+                dfs(root.left)
+                dfs(root.right)
+
+        dfs(root)
+        return res if res < float('inf') else -1
 """

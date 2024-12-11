@@ -44,3 +44,26 @@ print(sol.numTrees1(2))
 print(sol.numTrees1(3))
 print(sol.numTrees1(4))
 print(sol.numTrees1(5))
+
+"""
+My solution:
+
+class Solution:
+    def numTrees(self, n: int) -> int:
+        res = {0:1, 1:1, 2:2, 3:5}
+        
+        def numTreesRec(n):
+            if n in res:
+                return res[n]
+            
+            count = 0
+            for i in range(n):
+                l = numTreesRec(i)
+                r = numTreesRec(n-i-1)
+                count += l*r
+            
+            res[n] = count
+            return count
+
+        return numTreesRec(n)
+"""

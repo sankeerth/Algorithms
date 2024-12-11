@@ -49,21 +49,16 @@ print_levelorder_leetcode_style(sol.mergeTrees(deserialize('[1,3,2,5]'), deseria
 """
 My solution
 
-class Solution(object):
-    def mergeTrees(self, t1, t2, root=None):
-        if not t1 and not t2:
+class Solution:
+    def mergeTrees(self, root1: Optional[TreeNode], root2: Optional[TreeNode]) -> Optional[TreeNode]:
+        if root1 is None and root2 is None:
             return None
-
-        root = TreeNode(None)
-        if t1 and t2:
-            root.val = t1.val + t2.val
-        if not t1:
-            root.val = t2.val
-        if not t2:
-            root.val = t1.val
-
-        root.left = self.mergeTrees(t1.left if t1 else None, t2.left if t2 else None, root.left)
-        root.right = self.mergeTrees(t1.right if t1 else None, t2.right if t2 else None, root.right)
+        if root1 is None or root2 is None:
+            return root1 if root1 else root2
+        
+        root = TreeNode(root1.val+root2.val)
+        root.left = self.mergeTrees(root1.left, root2.left)
+        root.right = self.mergeTrees(root1.right, root2.right)
 
         return root
 """

@@ -26,26 +26,21 @@ Output: False
 from Tree.python.common.tree_operations import deserialize
 
 
-class Solution(object):
-    def findTarget(self, root, k):
-        """
-        :type root: TreeNode
-        :type k: int
-        :rtype: bool
-        """
-
-        keys = dict()
-
-        def preorder(root):
+class Solution:
+    def findTarget(self, root: Optional[TreeNode], k: int) -> bool:
+        values = set()
+        def dfs(root):
             if not root:
                 return False
-            else:
-                if root.val in keys:
-                    return True
-                keys[k - root.val] = 1
-                return preorder(root.left) or preorder(root.right)
+            
+            if (k-root.val) in values:
+                return True
+            
+            values.add(root.val)
+            return dfs(root.left) or dfs(root.right)
 
-        return preorder(root)
+        return dfs(root)
+
 
 sol = Solution()
 print(sol.findTarget(deserialize('[5,3,6,2,4,null,7]'), 9))

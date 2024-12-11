@@ -30,7 +30,7 @@ class Solution:
         :type root: TreeNode
         :rtype: List[int]
         """
-        subtree_sum = defaultdict(int)
+        subtreeSum = defaultdict(int)
 
         if not root:
             return []
@@ -38,17 +38,16 @@ class Solution:
         def postorder(root):
             if not root:
                 return 0
-            else:
-                left = postorder(root.left)
-                right = postorder(root.right)
-                val = root.val + left + right
-                subtree_sum[val] += 1
-                return val
+              left = postorder(root.left)
+              right = postorder(root.right)
+              val = root.val + left + right
+              subtreeSum[val] += 1
+              return val
 
         postorder(root)
-        max_val = max(subtree_sum.items(), key=lambda v: v[1])
+        max_val = max(subtreeSum.items(), key=lambda v: v[1])
         result = list()
-        for key, val in subtree_sum.items():
+        for key, val in subtreeSum.items():
             if val == max_val[1]:
                 result.append(key)
 

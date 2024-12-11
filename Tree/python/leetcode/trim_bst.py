@@ -40,27 +40,18 @@ Output:
 from Tree.python.common.tree_operations import deserialize, print_levelorder_leetcode_style
 
 
-class Solution(object):
-    def trimBST(self, root, L, R):
-        """
-        :type root: TreeNode
-        :type L: int
-        :type R: int
-        :rtype: TreeNode
-        """
-        def trimBSTRecursive(node):
-            if node:
-                if L <= node.val <= R:
-                    node.left = trimBSTRecursive(node.left)
-                    node.right = trimBSTRecursive(node.right)
-                else:
-                    if node.val < L:
-                        return trimBSTRecursive(node.right)
-                    else:
-                        return trimBSTRecursive(node.left)
-                return node
+class Solution:
+    def trimBST(self, root: Optional[TreeNode], low: int, high: int) -> Optional[TreeNode]:
+        if not root:
+            return None
+        root.left = self.trimBST(root.left, low, high)
+        root.right = self.trimBST(root.right, low, high)
 
-        return trimBSTRecursive(root)
+        if low <= root.val <= high:
+            return root
+        
+        return root.left if root.left else root.right
+
 
 sol = Solution()
 print_levelorder_leetcode_style(sol.trimBST(deserialize('[3,0,4,null,2,5,7,1,null,null,6]'), 0, 2))

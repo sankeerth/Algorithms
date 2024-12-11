@@ -47,6 +47,27 @@ print(sol.findTarget(deserialize('[5,3,6,2,4,null,7]'), 9))
 print(sol.findTarget(deserialize('[5,3,6,2,4,null,7]'), 11))
 print(sol.findTarget(deserialize('[5,3,6,2,4,null,7]'), 28))
 
+"""
+My other solution:
+
+class Solution:
+    def findTarget(self, root: Optional[TreeNode], k: int) -> bool:
+        values = set()
+        def dfs(root):
+            if root:
+                dfs(root.left)
+                values.add(root.val)
+                dfs(root.right)
+
+        dfs(root)
+
+        for val in values:
+            if k != val*2 and k-val in values: # covers for case [1] and k=2 or any case where val is k/2 since only one entry of val can be there
+                return True
+
+        return False
+"""
+
 
 """
 One of the leetcode solutions

@@ -131,8 +131,8 @@ class Solution(object):
                     max_val = max(max_val, l)
                     q.append('end_level')
                     continue
-                q.append(node.left if root else None)
-                q.append(node.right if root else None)
+                q.append(node.left if node else None)
+                q.append(node.right if node else None)
 
             return max_val
 

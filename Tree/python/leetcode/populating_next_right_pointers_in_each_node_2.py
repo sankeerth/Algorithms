@@ -91,3 +91,33 @@ sol = Solution()
 print_levelorder_leetcode_style(sol.connect(deserialize("[1, 2, 3, 4, 5, 6, 7]")))
 print_levelorder_leetcode_style(sol.connect(deserialize("[1,2,3,4,null,5,6,7,null,null,8,null,9,null,10,null,null,11,null]")))
 print_levelorder_leetcode_style(sol.connect(deserialize("[2,1,3,0,7,9,1,2,null,1,0,null,null,8,8,null,null,null,null,7]")))
+
+
+"""
+My solution:
+
+class Solution:
+    def connect(self, root: 'Node') -> 'Node':
+        def dfs(root, parent):
+            if root:
+                if parent:
+                    if parent.right and root != parent.right:
+                        root.next = parent.right
+                    else:
+                        sibling = parent.next
+                        while sibling:
+                            if sibling.left:
+                                root.next = sibling.left
+                                break
+                            elif sibling.right:
+                                root.next = sibling.right
+                                break
+                            else:
+                                sibling = sibling.next
+                
+                dfs(root.right, root)
+                dfs(root.left, root)
+            return root
+
+        return dfs(root, None)
+"""

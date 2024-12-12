@@ -13,7 +13,7 @@ def detect_cycle(graph):
             if not visited[v]:
                 parent[v] = s
                 detect_cycle_util(v)
-            elif parent[s] != v:
+            elif parent[s] != v: # undirected edge, so v could've been already visited and s could've been visited from v itself; If not a cycle is present
                 print(cycle_list + [v])
         cycle_list.pop()
 

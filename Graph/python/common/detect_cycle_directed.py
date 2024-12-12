@@ -31,4 +31,4 @@ graph.add_directed_edge(2, 0)
 graph.add_directed_edge(2, 3)
 graph.add_directed_edge(3, 3)
 
-detect_cycle(graph)
+detect_cycle(graph) # check course_schedul_i.py for detect cycle implementation w/o all cycles

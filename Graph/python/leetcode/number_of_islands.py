@@ -86,65 +86,41 @@ print(sol.numIslands([[]]))
 
 
 """
-My BFS solution:
+My DFS and BFS solution:
 
 class Solution:
     def numIslands(self, grid: List[List[str]]) -> int:
+        res = 0
         rows, cols = len(grid), len(grid[0])
         visited = set()
-        res = 0
 
         def neighbors(i, j):
-            for x, y in ((i-1,j), (i,j+1), (i+1,j), (i,j-1)):
+            for x, y in [(i-1,j),(i,j+1),(i+1,j),(i,j-1)]:
                 if 0 <= x < rows and 0 <= y < cols:
                     yield x, y
-        
-        def bfs(i, j):
-            queue = []
-            queue.append((i, j))
 
+        def dfs(i, j):
+            visited.add((i,j))
+            for x, y in neighbors(i, j):
+                if grid[x][y] == "1" and (x,y) not in visited:
+                    dfs(x, y)
+
+        def bfs(i, j):
+            queue = [(i,j)]
+            visited.add((i,j))
             while queue:
                 i, j = queue.pop(0)
                 for x, y in neighbors(i, j):
-                    if grid[x][y] == "1" and (x, y) not in visited:
-                        queue.append((x, y))
-                        visited.add((x, y))
-        
+                    if grid[x][y] == "1" and (x,y) not in visited:
+                        queue.append((x,y))
+                        visited.add((x,y)) # imp to avoid TLE else duplicate neighbors will be added to the queue
+
+
         for i in range(rows):
             for j in range(cols):
-                if grid[i][j] == "1" and (i, j) not in visited:
-                    visited.add((i, j))
+                if grid[i][j] == "1" and (i,j) not in visited:
+                    res += 1
                     bfs(i, j)
-                    res += 1
-
-        return res
-"""
-
-"""
-My DFS solution:
-
-class Solution:
-    def numIslands(self, grid: List[List[str]]) -> int:
-        rows, cols = len(grid), len(grid[0])
-        visited = set()
-        res = 0
-
-        def neighbors(i, j):
-            for x, y in ((i-1,j), (i,j+1), (i+1,j), (i,j-1)):
-                if 0 <= x < rows and 0 <= y < cols:
-                    yield x, y
         
-        def dfs(i, j):
-            visited.add((i, j))
-            for x, y in neighbors(i, j):
-                if grid[x][y] == "1" and (x, y) not in visited:
-                    dfs(x, y)
-        
-        for i in range(rows):
-            for j in range(cols):
-                if grid[i][j] == "1" and (i, j) not in visited:
-                    dfs(i, j)
-                    res += 1
-
         return res
 """

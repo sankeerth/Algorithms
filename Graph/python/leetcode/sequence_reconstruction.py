@@ -1,11 +1,15 @@
 """
 444. Sequence Reconstruction
 
-Check whether the original sequence org can be uniquely reconstructed from the sequences in seqs. 
-The org sequence is a permutation of the integers from 1 to n, with 1 ≤ n ≤ 104. 
-Reconstruction means building a shortest common supersequence of the sequences in seqs 
-(i.e., a shortest sequence so that all sequences in seqs are subsequences of it). 
-Determine whether there is only one sequence that can be reconstructed from seqs and it is the org sequence.
+You are given an integer array nums of length n where nums is a permutation of the integers in the range [1, n]. You are also given a 2D integer array sequences where sequences[i] is a subsequence of nums.
+
+Check if nums is the shortest possible and the only supersequence. The shortest supersequence is a sequence with the shortest length and has all sequences[i] as subsequences. There could be multiple valid supersequences for the given array sequences.
+
+For example, for sequences = [[1,2],[1,3]], there are two shortest supersequences, [1,2,3] and [1,3,2].
+While for sequences = [[1,2],[1,3],[1,2,3]], the only shortest supersequence possible is [1,2,3]. [1,2,3,4] is a possible supersequence but not the shortest.
+Return true if nums is the only shortest supersequence for sequences, or false otherwise.
+
+A subsequence is a sequence that can be derived from another sequence by deleting some or no elements without changing the order of the remaining elements.
 
 Example 1:
 Input: org = [1,2,3], seqs = [[1,2],[1,3]]
@@ -28,10 +32,15 @@ Input: org = [4,1,5,2,6,3], seqs = [[5,2,6,3],[4,1,5,2]]
 Output: true
 
 Constraints:
-1 <= n <= 10^4
-org is a permutation of {1,2,...,n}.
-1 <= segs[i].length <= 10^5
-seqs[i][j] fits in a 32-bit signed integer.
+n == nums.length
+1 <= n <= 104
+nums is a permutation of all the integers in the range [1, n].
+1 <= sequences.length <= 104
+1 <= sequences[i].length <= 104
+1 <= sum(sequences[i].length) <= 105
+1 <= sequences[i][j] <= n
+All the arrays of sequences are unique.
+sequences[i] is a subsequence of nums.
 """
 from typing import List
 

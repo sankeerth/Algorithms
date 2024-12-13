@@ -70,3 +70,36 @@ print(sol.canFinish(2, [[1,0]]))
 print(sol.canFinish(2, [[1,0],[0,1]]))
 print(sol.canFinish(6, [[1,0],[2,0],[2,1],[4,3],[5,4]]))
 print(sol.canFinish(4, [[2,0],[1,0],[3,1],[3,2],[1,3]]))
+
+
+"""
+Solution with Topological Sort Using Kahn's Algorithm (Indegree)
+
+from collections import defaultdict
+
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        adjList = [[] for _ in range(numCourses)]
+        indegree = [0] * numCourses
+
+        for i,j in prerequisites:
+            adjList[j].append(i)
+            indegree[i] += 1
+
+        numVisited = 0
+        queue = []
+
+        for node, val in enumerate(indegree):
+            if val == 0:
+                queue.append(node)
+
+        while queue:
+            node = queue.pop(0)
+            numVisited += 1
+            for nei in adjList[node]:
+                indegree[nei] -= 1
+                if indegree[nei] == 0:
+                    queue.append(nei)
+        
+        return numVisited == numCourses
+"""

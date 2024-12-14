@@ -38,35 +38,34 @@ Finally, we iterate over all the cells and add the ones that were visited by bot
 '''
 
 class Solution:
-    def pacificAtlantic(self, matrix: List[List[int]]) -> List[List[int]]:
-        result = []
-        if not matrix or not matrix[0]:
-            return result
-
-        m, n = len(matrix), len(matrix[0])
+    def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
+        res = []
+        rows, cols = len(heights), len(heights[0])
         pacific, atlantic = set(), set()
-        directions = [(-1, 0), (0, 1), (1, 0), (0, -1)] # define left, right, up, down
 
-        def dfs(x, y, ocean):
-            ocean.add((x, y))
-            for dx, dy in directions:
-                i, j = x + dx, y + dy
-                # if the coordinates are valid and if c(i) > c (i-1)
-                if 0 <= i < m and 0 <= j < n and (i, j) not in ocean and matrix[i][j] >= matrix[x][y]:
-                    dfs(i, j, ocean)
+        def neighbors(i, j):
+            for x, y in [(i-1,j),(i,j+1),(i+1,j),(i,j-1)]:
+                if 0 <= x < rows and 0 <= y < cols:
+                    yield x, y
+        
+        def dfs(i, j, ocean):
+            ocean.add((i,j))
+            for x, y in neighbors(i, j):
+                if (x,y) not in ocean and heights[x][y] >= heights[i][j]:
+                    dfs(x, y, ocean)
 
         # iterate for rows
-        for i in range(m):
-            dfs(i, 0, pacific)
-            dfs(i, n-1, atlantic)
+        for j in range(cols):
+            dfs(0, j, pacific)
+            dfs(rows-1, j, atlantic)
 
         # iterate for columns
-        for i in range(n):
-            dfs(0, i, pacific)
-            dfs(m-1, i, atlantic)
+        for i in range(rows):
+            dfs(i, 0, pacific)
+            dfs(i, cols-1, atlantic)
 
         # list which will have both the coordinates
-        return list(pacific.intersection(atlantic))
+        return list(pacific.intersection(atlantic))          
 
 
 s = Solution()

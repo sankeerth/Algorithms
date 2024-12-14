@@ -64,30 +64,28 @@ print(sol.decodeString("abc3[cd]xyz"))
 
 
 """
-My previous solution:
+My other solution using two stacks:
 
 class Solution:
     def decodeString(self, s: str) -> str:
-        num = ""
-        result = ""
-        i = 0
+        nStack, cStack = [], []
+        count = 0
+        cur = ""
 
-        while i < len(s):
-            if s[i] == '[':
-                r_i, r_s = self.decodeString(s[i + 1:])
-                i += r_i
-                if num == "":
-                    num = "1"  # default value
-                result += int(num) * r_s
-                num = ""
-            elif s[i] == ']':
-                return i+1, result
-            elif s[i].isdigit():
-                num += s[i]
+        for c in s:
+            if c.isdigit():
+                count = 10 * count + int(c)
+            elif c == "[":
+                cStack.append(cur)
+                nStack.append(count)
+                cur = ""
+                count = 0
+            elif c == "]":
+                count = nStack.pop()
+                cur = cStack.pop() + count * cur
+                count = 0
             else:
-                result += s[i]
+                cur += c
 
-            i += 1
-
-        return result
+        return cur
 """

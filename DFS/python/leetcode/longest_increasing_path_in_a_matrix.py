@@ -31,34 +31,31 @@ from typing import List
 
 class Solution:
     def longestIncreasingPath(self, matrix: List[List[int]]) -> int:
-        res = 0
+        longest = 0
         rows, cols = len(matrix), len(matrix[0])
-        memo = [[0] * cols for i in range(rows)]
+        memo = [[0] * cols for _ in range(rows)]
 
-        def neighbors(r, c):
-            for x, y in ((r-1,c), (r,c+1), (r+1,c), (r,c-1)):
+        def neighbors(i, j):
+            for x, y in [(i-1,j),(i,j+1),(i+1,j),(i,j-1)]:
                 if 0 <= x < rows and 0 <= y < cols:
                     yield x, y
 
         def dfs(i, j):
+            if memo[i][j]:
+                return memo[i][j]
             count = 1
             for x, y in neighbors(i, j):
-                if matrix[i][j] < matrix[x][y]:
-                    if memo[x][y]:
-                        count = max(count, memo[x][y] + 1)
-                    else:
-                        count = max(count, dfs(x, y) + 1)
-
+                if matrix[x][y] > matrix[i][j]:
+                    count = max(count, dfs(x, y)+1)
             memo[i][j] = count
             return count
 
         for i in range(rows):
             for j in range(cols):
                 if not memo[i][j]:
-                    count = dfs(i, j)
-                    res = max(res, count)
-
-        return res
+                    longest = max(longest, dfs(i, j))
+        
+        return longest
 
 
 sol = Solution()

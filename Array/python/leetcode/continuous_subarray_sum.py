@@ -38,7 +38,7 @@ class Solution:
     and the difference is the sum of elements between index i and j, and the value is a multiple of k.
     """
     def checkSubarraySum(self, nums: List[int], k: int) -> bool:
-        runningSumMap = defaultdict(int)
+        runningSumMap = {0: -1} # test case: [23,2,4,6,6] and k=7
         runningSum = 0
 
         for i in range(len(nums)):
@@ -62,10 +62,12 @@ print(sol.checkSubarraySum([23,2,6,4,7], 13))
 # failed testcases
 print(sol.checkSubarraySum([5,0,0,0], 3))
 print(sol.checkSubarraySum([1,2,12], 6))
+print(sol.checkSubarraySum([23,2,4,6,6], 7))
+print(sol.checkSubarraySum([1,3,0,6], 6))
 
 
 """
-My solution:
+My solution (TLE):
 
 class Solution:
     def checkSubarraySum(self, nums: List[int], k: int) -> bool:
@@ -76,8 +78,10 @@ class Solution:
         for i in range(1, len(nums)):
             num = nums[i]
             prefixSum += num
-            if num == 0 and nums[i-1] == 0:
-                return True
+            if num == 0:
+                if nums[i-1] == 0:
+                    return True
+                continue
             if prefixSum % k == 0:
                 return True
             else:

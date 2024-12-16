@@ -70,3 +70,28 @@ class Solution:
                 cur = t
         return res
 """
+
+"""
+Heap solution:
+
+from heapq import heappush, heappop
+
+class Solution:
+    def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
+        fleet = 0
+        heap = []
+
+        for i in range(len(position)):
+            heappush(heap, (-1 * position[i], speed[i]))
+        
+        time = 0
+        while heap:
+            pos, sp = heappop(heap)
+
+            t = (target+pos) / sp
+            if t > time:
+                fleet += 1
+                time = t
+
+        return fleet
+"""

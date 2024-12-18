@@ -50,28 +50,30 @@ import random
 
 
 class Solution:
+
     def __init__(self, w: List[int]):
-        self.prefixSum = [0] * (len(w)+1)
-        for i in range(len(w)):
-            self.prefixSum[i+1] = self.prefixSum[i] + w[i]
+        self.prefixSum = [0] * len(w)
+        self.prefixSum[0] = w[0]
+        for i in range(1, len(w)):
+            self.prefixSum[i] = self.prefixSum[i-1] + w[i]
         
-        self.start = 0
-        self.end = self.prefixSum[-1]-1
-        self.length = len(w)
+        self.total = self.prefixSum[-1]
 
     def pickIndex(self) -> int:
-        # binary search for closest prev value
-        target = random.randint(self.start, self.end)
-        lo, hi = 0, self.length
+        r = random.random()
+        target = self.total * r
+        
+        lo, hi = 0, len(self.prefixSum)
         while lo <= hi:
-            mid = (lo + hi) // 2
-            if self.prefixSum[mid] <= target < self.prefixSum[mid+1]:
-                return mid
-            elif target > self.prefixSum[mid]:
-                lo = mid
+            if lo == hi:
+                return lo
+            mid = lo + (hi-lo) // 2
+            if self.prefixSum[mid] < target <= self.prefixSum[mid+1]:
+                return mid+1
+            elif self.prefixSum[mid] < target:
+                lo = mid+1
             else:
                 hi = mid
-        return lo
 
 
 def execute(cmds, inputs):

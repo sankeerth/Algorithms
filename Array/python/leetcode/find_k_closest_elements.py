@@ -37,6 +37,7 @@ class Solution:
 sol = Solution()
 sol.findClosestElements([1, 2, 3, 4, 5], 4, 4)
 sol.findClosestElements([1, 2, 3, 4, 5], 4, -1)
+sol.findClosestElements([1, 5, 10], 1, 4)
 
 """
 My O(n) solution which is still accepted since worst case should be at least O(k) where k -> n (len of arr):
@@ -78,7 +79,7 @@ class Solution:
                 elif arr[mid] < target:
                     lo = mid + 1
                 else:
-                    hi = mid - 1 if mid - 1 > lo else lo # so that hi does not go less than lo to negative
+                    hi = mid # so that hi does not go less than lo to negative; tt->[1,5,10], x=4, k=1
 
         minimum = binarySearch(0, len(arr)-1, x)
         start, end = minimum, minimum

@@ -26,18 +26,16 @@ from typing import List
 
 class Solution:
     def maxSubArray(self, nums: List[int]) -> int:
-        if not nums:
-            return 0
-
-        current_sum, max_sum = 0, nums[0]
+        res = float('-inf')
+        prefixSum = 0
 
         for i in range(len(nums)):
-            current_sum += nums[i]
-            max_sum = max(max_sum, current_sum)
-            if current_sum < 0:
-                current_sum = 0
+            prefixSum += nums[i]
+            res = max(res, prefixSum)
+            if prefixSum < 0:
+                prefixSum = 0
 
-        return max_sum
+        return res
 
 
 sol = Solution()

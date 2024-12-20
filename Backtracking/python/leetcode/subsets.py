@@ -20,19 +20,18 @@ If nums = [1,2,3], a solution is:
 """
 
 
-class Solution(object):
-    def subsets(self, nums):
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
         res, cur = [], []
-        nums.sort()
-
-        def subsetsRecursive(i):
+        
+        def recursive(i):
             res.append(list(cur))
             for j in range(i, len(nums)):
                 cur.append(nums[j])
-                subsetsRecursive(j+1)
+                recursive(j+1)
                 cur.pop()
 
-        subsetsRecursive(0)
+        recursive(0)
         return res
 
 

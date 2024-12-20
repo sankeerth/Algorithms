@@ -38,6 +38,49 @@ from math import ceil
 class Solution:
     def restoreIpAddresses(self, s: str) -> List[str]:
         res = []
+        ipLen = 4
+        
+        def restore(i, ip):
+            if len(ip) == ipLen:
+                if i == len(s):
+                    res.append(".".join(ip))
+                return
+            
+            cur = ""
+            for j in range(i, min(i+3, len(s))):
+                cur += s[j]
+                if len(cur) > 1 and cur[0] == '0' or int(cur) > 255:
+                    break
+                ip.append(cur)
+                restore(j+1, ip)
+                ip.pop()
+            
+        if len(s) > 12:
+            return []
+        
+        restore(0, [])
+        return res
+        
+
+s = Solution()
+print(s.restoreIpAddresses("0000"))
+print(s.restoreIpAddresses("1111"))
+print(s.restoreIpAddresses("25525511135"))
+print(s.restoreIpAddresses("255255111256"))
+print(s.restoreIpAddresses("010010"))
+print(s.restoreIpAddresses("101023"))
+print(s.restoreIpAddresses("1111111111111"))
+print(s.restoreIpAddresses("111"))
+print(s.restoreIpAddresses("000000"))
+print(s.restoreIpAddresses("2525781"))
+
+
+"""
+Other solution:
+
+class Solution:
+    def restoreIpAddresses(self, s: str) -> List[str]:
+        res = []
         def restoreIpAddressesRecursive(index, cur):
             if ceil(len(s)-index) / 3 + len(cur) > 4 or (len(s)-index) + len(cur) < 4:
                 return
@@ -59,41 +102,4 @@ class Solution:
 
         restoreIpAddressesRecursive(0, [])
         return res
-        
-
-s = Solution()
-print(s.restoreIpAddresses("0000"))
-print(s.restoreIpAddresses("1111"))
-print(s.restoreIpAddresses("25525511135"))
-print(s.restoreIpAddresses("255255111256"))
-print(s.restoreIpAddresses("010010"))
-print(s.restoreIpAddresses("101023"))
-print(s.restoreIpAddresses("1111111111111"))
-print(s.restoreIpAddresses("111"))
-print(s.restoreIpAddresses("000000"))
-print(s.restoreIpAddresses("2525781"))
-
-
-"""
-Solution of my first submission:
-
-class Solution:
-    def restoreIpAddresses(self, s: str) -> List[str]:
-        result = []
-
-        def restoreIpAddressesRecursive(s, count, ip):
-            if ceil(len(s)/3) > count+1 or len(s) < count+1:
-                return
-            elif count == 0:
-                if int(s) < 256 and not (s[0] == '0' and len(s) > 1):
-                    result.append(ip+s)
-            elif s[0] == '0':
-                restoreIpAddressesRecursive(s[1:], count-1, ip + '0.')
-            else:
-                for i in range(len(s)):
-                    if int(s[:i+1]) < 256:
-                        restoreIpAddressesRecursive(s[i+1:], count-1, ip + s[:i+1] + '.')
-
-        restoreIpAddressesRecursive(s, 3, '')
-        return result
 """

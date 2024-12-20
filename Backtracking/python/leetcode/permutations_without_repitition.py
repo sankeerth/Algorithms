@@ -1,50 +1,51 @@
 """
-46. Permutations
+47. Permutations II
 
-Given a collection of distinct numbers, return all possible permutations.
+Given a collection of numbers, nums, that might contain duplicates, return all possible unique permutations in any order.
 
-For example,
-[1,1,2] have the following unique permutations:
-[
-  [1,1,2],
-  [1,2,1],
-  [2,1,1]
-]
+Example 1:
+Input: nums = [1,1,2]
+Output:
+[[1,1,2],
+ [1,2,1],
+ [2,1,1]]
 
-https://leetcode.com/problems/permutations/discuss/
-Has a template for all such problems
-But my solution below has a similar one but not the same
+Example 2:
+Input: nums = [1,2,3]
+Output: [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+
+Constraints:
+1 <= nums.length <= 8
+-10 <= nums[i] <= 10
 """
+from collections import Counter
 
+class Solution:
+    def permuteUnique(self, nums: List[int]) -> List[List[int]]:
+        res = []
 
-class Solution(object):
-    def permuteUnique(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: List[List[int]]
-        """
-        result = list()
-
-        def swap(i, j):
-            temp = nums[i]
-            nums[i] = nums[j]
-            nums[j] = temp
-
-        def permute_recr(i, l):
-            if i == l:
-                copy = nums[:]
-                result.append(copy)
+        def permutations(arr, counter):
+            if len(arr) == len(nums):
+                res.append(arr[:])
                 return
-            for j in range(i, l):
-                if i == j or (j > 0 and nums[i] != nums[j] and nums[j] != nums[j-1]):
-                    swap(i, j)
-                    permute_recr(i + 1, l)
-                    swap(i, j)
+            for num in counter:
+                if counter[num] > 0:
+                    counter[num] -= 1
+                    arr.append(num)
+                    permutations(arr, counter)
+                    arr.pop()
+                    counter[num] += 1
+        
+        permutations([], Counter(nums))
+        return res
 
-        permute_recr(0, len(nums))
-
-        return result
 
 sol = Solution()
 print(sol.permuteUnique([1,2,2,1]))
 print(sol.permuteUnique([1,2,1,1]))
+print(sol.permuteUnique([1,2,3]))
+
+
+"""
+Template for such problems: https://leetcode.com/problems/permutations/discuss/
+"""

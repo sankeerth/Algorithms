@@ -69,17 +69,19 @@ class Solution(object):
 """
 Iterative solution:
 
-class Solution(object):
-    def subsets(self, nums):
-        res, s = [[]], set()
+class Solution:
+    def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
+        res = [[]]
+        seen = set()
+        nums.sort()
 
         for num in nums:
             for i in range(len(res)):
-                sub = list(res[i])
-                sub.append(num)
-                if set(sub) not in s:
+                sub = res[i] + [num]
+                tup = tuple(sub)
+                if tup not in seen:
                     res.append(sub)
-                    s.union(set(sub))
-
+                    seen.add(tup)
+        
         return res
 """

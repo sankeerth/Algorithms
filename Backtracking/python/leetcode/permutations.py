@@ -29,7 +29,7 @@ class Solution:
             for num in nums:
                 if num not in seen:
                     arr.append(num)
-                    seen.add(num)
+                    seen.add(num) # can add the index instead so it works for duplicate entries but has duplicate permuations in result
                     permutations(arr, seen)
                     arr.pop()
                     seen.discard(num)
@@ -39,7 +39,6 @@ class Solution:
 
 
 sol = Solution()
-sol.permute([1,2,1])
 sol.permute([1,2,3])
 sol.permute([1])
 

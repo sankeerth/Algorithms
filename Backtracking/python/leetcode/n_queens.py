@@ -17,40 +17,45 @@ Output: [["Q"]]
 Constraints:
 1 <= n <= 9
 """
-from typing import List
+from collections import defaultdict
 
 
 class Solution:
     def solveNQueens(self, n: int) -> List[List[str]]:
-        board = [['.'] * n for _ in range(n)]
         res = []
+        rows, cols = [0] * n, [0] * n
+        lDiag, rDiag = defaultdict(int), defaultdict(int)
+        board = [['.'] * n for _ in range(n)]
 
-        def solve(i, horizontal, vertical, lOblique, rOblique):
+        def setAttributes(i, j, val):
+            rows[i] = val
+            cols[j] = val
+            lDiag[i-j] = val
+            rDiag[i+j] = val
+        
+        def addBoard():
+            solved = []
+            for row in board:
+                b = "".join(row)
+                solved.append(b)
+            res.append(solved)
+
+        def solve(i):
             if i == n:
-                if len(horizontal) == n:
-                    temp = []
-                    for row in board:
-                        temp.append(''.join(row))
-                    res.append(temp)
+                addBoard()
                 return
             
             for j in range(n):
-                if i not in horizontal and j not in vertical and j-i not in lOblique and i+j not in rOblique:
-                    board[i][j] = 'Q'
-                    horizontal.add(i)
-                    vertical.add(j)
-                    lOblique.add(j-i)
-                    rOblique.add(i+j)
-
-                    solve(i+1, horizontal, vertical, lOblique, rOblique)
-                    board[i][j] = '.'
-                    horizontal.remove(i)
-                    vertical.remove(j)
-                    lOblique.remove(j-i)
-                    rOblique.remove(i+j)
-
-
-        solve(0, set(), set(), set(), set())
+                if rows[i] == 1 or cols[j] == 1 or lDiag[i-j] == 1 or rDiag[i+j] == 1:
+                    continue
+                
+                board[i][j] = 'Q'
+                setAttributes(i, j, 1)
+                solve(i+1)
+                board[i][j] = '.'
+                setAttributes(i, j, 0)
+        
+        solve(0)
         return res
 
 

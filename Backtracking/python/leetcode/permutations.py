@@ -1,20 +1,50 @@
 """
 46. Permutations
 
-Given a collection of distinct numbers, return all possible permutations.
+Given an array nums of distinct integers, return all the possible 
+permutations
+. You can return the answer in any order.
 
-For example,
-[1,2,3] have the following permutations:
-[
-  [1,2,3],
-  [1,3,2],
-  [2,1,3],
-  [2,3,1],
-  [3,1,2],
-  [3,2,1]
-]
+Example 1:
+Input: nums = [1,2,3]
+Output: [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+
+Example 2:
+Input: nums = [0,1]
+Output: [[0,1],[1,0]]
+
+Example 3:
+Input: nums = [1]
+Output: [[1]]
 """
 
+
+class Solution:
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        res = []
+        def permutations(arr=list(), seen=set()):
+            if len(arr) == len(nums):
+                res.append(arr[:])
+                return
+            for num in nums:
+                if num not in seen:
+                    arr.append(num)
+                    seen.add(num)
+                    permutations(arr, seen)
+                    arr.pop()
+                    seen.discard(num)
+
+        permutations()
+        return res
+
+
+sol = Solution()
+sol.permute([1,2,1])
+sol.permute([1,2,3])
+sol.permute([1])
+
+"""
+Solution using swap:
 
 class Solution(object):
     def permute(self, nums):
@@ -41,7 +71,4 @@ class Solution(object):
 
         permute_recr(0, len(nums))
         print(result)
-
-sol = Solution()
-sol.permute([1,2,1])
-sol.permute([1,2,3])
+"""

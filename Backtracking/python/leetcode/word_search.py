@@ -24,56 +24,40 @@ n = board[i].length
 1 <= word.length <= 15
 board and word consists of only lowercase and uppercase English letters.
 """
-from collections import defaultdict
+class Solution:
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        rows, cols = len(board), len(board[0])
 
-
-class Solution(object):
-    def exist(self, board, word):
-        """
-        :type board: List[List[str]]
-        :type word: str
-        :rtype: bool
-        """
-        word_len = len(word)
-        if word_len == 0:
-            return True
-
-        if not board:
-            return False
-
-        rows = len(board)
-        cols = len(board[0])
-
-        def dfs(i, j, index):
-            if index == len(word):
+        def neighbors(i, j, char):
+            for x, y in [(i-1,j),(i,j+1),(i+1,j),(i,j-1)]:
+                if 0 <= x < rows and 0 <= y < cols and board[x][y] == char:
+                    yield x, y
+        
+        def backtrack(i, j, cur):
+            if len(cur) > len(word):
+                return False
+            if cur == word:
                 return True
-
+            
             char = board[i][j]
-            board[i][j] = '*'
+            board[i][j] = "-"
+            nextChar = word[len(cur)]
 
-            if i > 0 and board[i - 1][j] == word[index]:
-                if dfs(i - 1, j, index + 1):
+            for x, y in neighbors(i, j, nextChar):
+                if backtrack(x, y, cur+nextChar):
                     return True
-            if j > 0 and board[i][j - 1] == word[index]:
-                if dfs(i, j - 1, index + 1):
-                    return True
-            if i < rows - 1 and board[i + 1][j] == word[index]:
-                if dfs(i + 1, j, index + 1):
-                    return True
-            if j < cols - 1 and board[i][j + 1] == word[index]:
-                if dfs(i, j + 1, index + 1):
-                    return True
-
+            
             board[i][j] = char
             return False
-
+        
         for i in range(rows):
             for j in range(cols):
                 if board[i][j] == word[0]:
-                    if dfs(i, j, 1):
+                    if backtrack(i, j, board[i][j]):
                         return True
 
-        return False
+        return False            
+
 
 sol = Solution()
 print(sol.exist([["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], "ABCCED"))

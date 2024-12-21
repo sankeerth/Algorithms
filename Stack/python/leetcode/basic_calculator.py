@@ -64,11 +64,60 @@ class Solution:
 
 
 sol = Solution()
-print(sol.calculate("6-4/2"))
 print(sol.calculate("1 + 1 "))
 print(sol.calculate(" 2-1 + 2 "))
 print(sol.calculate("(1+(4+5+2)-3)+(6+8)"))
-print(sol.calculate("(1-(4+5+2)-3)+(6+8)"))
 print(sol.calculate("(1-(4-5+2)-3)"))
 print(sol.calculate("1-(4-5+2)"))
 print(sol.calculate("+48 + -48"))
+
+
+"""
+My other solution with two stacks:
+
+class Solution:
+    def calculate(self, s: str) -> int:
+        ops = {"+","-"}
+        def evaluate(numbers, operators):
+            c = 0
+            while len(numbers) >= 2:
+                a = numbers.popleft()
+                b = numbers.popleft()
+                op = operators.popleft()
+                
+                if op == "+":
+                    c = a + b
+                elif op == "-":
+                    c = a - b
+                numbers.appendleft(c)
+
+            return numbers[-1]
+
+        def calc(i):
+            numbers, operators = deque(), deque()
+            num = 0
+
+            while i < len(s):
+                c = s[i]
+                if c.isdigit():
+                    num = 10 * num + int(c)
+                elif c in ops:
+                    numbers.append(num)
+                    operators.append(c)
+                    num = 0
+                elif c == "(":
+                    i, r = calc(i+1)
+                    num += r
+                elif c == ")":
+                    numbers.append(num)
+                    return i, evaluate(numbers, operators)
+                
+                if i == len(s)-1:
+                    numbers.append(num)
+
+                i += 1
+            
+            return evaluate(numbers, operators)
+
+        return calc(0)
+"""

@@ -32,24 +32,21 @@ It's guaranteed that all parentheses are balanced.
 
 class Solution:
     def reverseParentheses(self, s: str) -> str:
-        if not s:
-            return ""
-        
-        def reverseParenthesesRecursive(s, i):
-            result = []
+        def reverse(i):
+            string = ""
             while i < len(s):
-                if s[i] == '(':
-                    r, i = reverseParenthesesRecursive(s, i+1)
-                    result += r
-                elif s[i] == ')':
-                    return result[::-1], i
+                c = s[i]
+                if c == "(":
+                    i, r = reverse(i+1)
+                    string += r
+                elif c == ")":
+                    return i, string[::-1]
                 else:
-                    result.append(s[i])
+                    string += c
                 i += 1
-
-            return "".join(result)
-
-        return reverseParenthesesRecursive(s, 0)
+            return string
+        
+        return reverse(0)
 
 
 s = Solution()

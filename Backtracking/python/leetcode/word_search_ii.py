@@ -26,74 +26,78 @@ All the strings of words are unique.
 from typing import List
 
 
+class TrieNode:
+    def __init__(self, char):
+        self.char = char
+        self.children = dict()
+        self.wordEnd = False
+    
+    def __repr__(self):
+        return "TrieNode({})".format(self.char)
+
+    def getChar(self):
+        return self.char
+    
+    def addChild(self, char):
+        if not char in self.children:
+            child = TrieNode(char)
+            self.children[char] = child
+    
+    def getChild(self, char):
+        if char in self.children:
+            return self.children[char]
+        return None
+
+    def isWordEnd(self):
+        return self.wordEnd
+
+    def setWordEnd(self):
+        self.wordEnd = True
+
 class Solution:
     def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
-        class Trie:
-            def __init__(self, char):
-                self.char = char
-                self.d = dict()
-                self.wordEnd = False
-
-            def __repr__(self):
-                return "Trie({})".format(self.char)
-
-            def getChar(self):
-                return self.char
-
-            def addChild(self, char):
-                if not char in self.d:
-                    child = Trie(char)
-                    self.d[char] = child
-
-            def isOrGetChild(self, char): # returns child Trie node or None
-                if char in self.d:
-                    return self.d[char]
-                return None
-
-            def isWordEnd(self):
-                return self.wordEnd
-
-            def setWordEnd(self, wordEnd):
-                self.wordEnd = wordEnd
-
-        result = set()
         rows, cols = len(board), len(board[0])
-        root = Trie('')
+        res = set()
 
-        def buildTrie(root):
-            for word in words:
-                node = root
-                for char in word:
-                    if not node.isOrGetChild(char):
-                        node.addChild(char)
-                    node = node.isOrGetChild(char)
-                node.wordEnd = True
+        def addWordToTrie(word, root):
+            for char in word:
+                if not root.getChild(char):
+                    root.addChild(char)
+                root = root.getChild(char)
+            root.setWordEnd()
 
-        def dfs(i, j, node, wordList):
-            if node.isWordEnd():
-                result.add("".join(wordList))
-  
-            cur = board[i][j]
-            board[i][j] = '*'
+        def neighbors(i, j):
+            for x, y in [(i-1,j),(i,j+1),(i+1,j),(i,j-1)]:
+                if 0 <= x < rows and 0 <= y < cols and board[x][y] != "#":
+                    yield x, y
 
-            for x, y in [(i-1, j), (i, j+1), (i+1, j), (i, j-1)]:
-                if 0 <= x < rows and 0 <= y < cols:
-                    child = node.isOrGetChild(board[x][y])
-                    if child:
-                        wordList.append(board[x][y])
-                        dfs(x, y, child, wordList)
+        def backtrack(i, j, root, word):
+            if root.isWordEnd():
+                res.add(word)
+            
+            char = board[i][j]
+            board[i][j] = "#"
 
-            board[i][j] = cur
-            wordList.pop()
-
-        buildTrie(root)
+            for x, y in neighbors(i, j):
+                child = root.getChild(board[x][y])
+                if child:
+                    backtrack(x, y, child, word + child.getChar())
+            
+            board[i][j] = char
+        
+        root = TrieNode("*")
+        for word in words:
+            addWordToTrie(word, root)
+        
         for i in range(rows):
             for j in range(cols):
-                child = root.isOrGetChild(board[i][j])
+                if len(res) == len(words):
+                    break
+                child = root.getChild(board[i][j])
                 if child:
-                    dfs(i, j, child, [child.getChar()])
-
-        return list(result)
+                    backtrack(i, j, child, child.getChar())
+        
+        return list(res)
 
 
 s = Solution()

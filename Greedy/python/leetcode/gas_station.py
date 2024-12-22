@@ -53,7 +53,7 @@ from typing import List
 
 
 class Solution:
-    # My naive solution
+    # My naive solution (TLE)
     def canCompleteCircuit(self, gas: List[int], cost: List[int]) -> int:
         length = len(gas)
 
@@ -96,19 +96,18 @@ class Solution:
         index, total, tank = 0, 0, 0
         for i in range(len(gas)):
             consume = gas[i] - cost[i]
+            total += consume # add each gas[i]-cost[i] here to ensure total trip can be completed and not just the one in the index
             tank += consume
 
             if tank < 0:
                 tank = 0
                 index = i+1
-            
-            total += consume # add each gas[i]-cost[i] here to ensure total trip can be completed and not just the one in the index
 
         return -1 if total < 0 else index
 """
 
 """
-leetcode naive solution
+leetcode naive solution (TLE)
 
 class Solution:
     def canCompleteCircuit(self, gas: List[int], cost: List[int]) -> int:

@@ -16,32 +16,30 @@ A solution set is:
   [2, 2, 3]
 ]
 """
+from typing import List
 
 
-class Solution(object):
-    def combinationSum(self, candidates, target):
-        """
-        :type candidates: List[int]
-        :type target: int
-        :rtype: List[List[int]]
-        """
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
         res, cur = [], []
-        candidates.sort(reverse=True)
+        candidates.sort()
 
         def combinationSumRecursive(i, total):
             if total == target:
                 res.append(list(cur))
-            else:
-                for j in range(i, len(candidates)):
-                    if candidates[j] + total <= target:
-                        cur.append(candidates[j])
-                        combinationSumRecursive(j, total + candidates[j])
-                        cur.pop()
+                return
+            for j in range(i, len(candidates)):
+                if candidates[j] + total > target:
+                    break
+                cur.append(candidates[j])
+                combinationSumRecursive(j, total + candidates[j])
+                cur.pop()
 
         combinationSumRecursive(0, 0)
         return res
 
 
 sol = Solution()
+print(sol.combinationSum([2,3,5], 8))
 print(sol.combinationSum([2,7,3,6], 7))
 print(sol.combinationSum([2,7,3,1], 14))

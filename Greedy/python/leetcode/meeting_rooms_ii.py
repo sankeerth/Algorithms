@@ -13,26 +13,22 @@ Input: [[7,10],[2,4]]
 Output: 1
 """
 from typing import List
-import heapq
+from heapq import heappush, heappop
 
 
 class Solution:
     def minMeetingRooms(self, intervals: List[List[int]]) -> int:
-        if not intervals:
-            return 0
-
-        heap = []
+        rooms = 1
         intervals.sort()
-        heapq.heappush(heap, intervals[0][1])
-        res = 1
+        heap = [intervals[0][1]]
 
         for start, end in intervals[1:]:
             while heap and start >= heap[0]:
-                heapq.heappop(heap)
-            heapq.heappush(heap, end)
-            res = max(res, len(heap))
+                heappop(heap)
+            heappush(heap, end)
+            rooms = max(rooms, len(heap))
 
-        return res
+        return rooms
 
 
 s = Solution()

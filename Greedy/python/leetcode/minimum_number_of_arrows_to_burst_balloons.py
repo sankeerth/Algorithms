@@ -36,6 +36,7 @@ from heapq import heappush, heappop
 
 
 class Solution:
+    # using both ends of the balloon for comparison
     def findMinArrowShots(self, points: List[List[int]]) -> int:
         res, heap = 0, []
         for point in points:
@@ -49,6 +50,23 @@ class Solution:
                 end = min(end, nextEnd)
             res += 1
 
+        return res
+
+    # simpler heap solution comparing only start with end of the smallest balloon in heap
+    def findMinArrowShots(self, points: List[List[int]]) -> int:
+        res = 0
+        heap = []
+        points.sort()
+        points.append([float('inf'), float('inf')]) # appending this so the last remaining ones in heap are also popped
+
+        for xs, xe in points:
+            if heap and xs > heap[0]:
+                while heap:
+                    heappop(heap)
+                res += 1
+            heappush(heap, xe)
+        
+        points.pop() # pop to restore original array
         return res
 
 

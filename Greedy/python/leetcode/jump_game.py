@@ -24,6 +24,7 @@ from typing import List
 
 class Solution:
     # Read good explanation solution section for backtracking, DP and Greedy approaches
+    # scan from end
     def canJump(self, nums: List[int]) -> bool:
         leftMostIndexLeadingToLastIndex = len(nums)-1
 
@@ -32,6 +33,16 @@ class Solution:
                 leftMostIndexLeadingToLastIndex = i
             
         return leftMostIndexLeadingToLastIndex == 0
+
+    # scan from start
+    def canJump(self, nums: List[int]) -> bool:
+            i, jump, n = 0, 0, len(nums)
+    
+            while i <= jump and i < n:
+                jump = max(jump, i+nums[i])
+                i += 1
+            
+            return jump >= n-1
 
 
 sol = Solution()

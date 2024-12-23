@@ -23,28 +23,25 @@ Constraints:
 """
 
 
-class Solution(object):
-    def combinationSum2(self, candidates, target):
-        """
-        :type candidates: List[int]
-        :type target: int
-        :rtype: List[List[int]]
-        """
-        res, cur = [], []
-        candidates.sort(reverse=True)
+class Solution:
+    def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
+        res, arr = [], []
+        candidates.sort()
 
-        def combinationSum2Recursive(i, total):
-            if total == target:
-                res.append(list(cur))
-            else:
-                for j in range(i, len(candidates)):
-                    if i == j or candidates[j] != candidates[j-1]:
-                        if candidates[j] + total <= target:
-                            cur.append(candidates[j])
-                            combinationSum2Recursive(j+1, total + candidates[j])
-                            cur.pop()
+        def recursive(i, s):
+            if s == target:
+                res.append(list(arr))
+                return
+            for j in range(i, len(candidates)):
+                if j > i and candidates[j] == candidates[j-1]:
+                    continue
+                if s + candidates[j] > target:
+                    break
+                arr.append(candidates[j])
+                recursive(j+1, s+candidates[j])
+                arr.pop()
 
-        combinationSum2Recursive(0, 0)
+        recursive(0, 0)
         return res
 
 

@@ -121,19 +121,17 @@ My version of the same one using max and diff b/w start and end pointers:
 
 class Solution:
     def minMeetingRooms(self, intervals: List[List[int]]) -> int:
-        if not intervals:
-            return 0
-        start_intervals = sorted([start for start, _ in intervals])
-        end_intervals = sorted([end for _, end in intervals])
+        startIntervals = sorted([start for start, _ in intervals])
+        endIntervals = sorted([end for _, end in intervals])
 
-        s_ptr, e_ptr, res = 0, 0, 0
-        while s_ptr < len(start_intervals):
-            start = start_intervals[s_ptr]
-            while start >= end_intervals[e_ptr]:
-                e_ptr += 1
+        si, ei, res = 0, 0, 0
+        while si < len(intervals):
+            start = startIntervals[si]
+            while start >= endIntervals[ei]:
+                ei += 1
 
-            s_ptr += 1
-            res = max(res, s_ptr - e_ptr)
+            res = max(res, si-ei+1)
+            si += 1
 
         return res
 """

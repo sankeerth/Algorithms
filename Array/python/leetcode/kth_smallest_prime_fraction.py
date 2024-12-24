@@ -30,25 +30,20 @@ from heapq import heappush, heappop
 
 class Solution:
     def kthSmallestPrimeFraction(self, arr: List[int], k: int) -> List[int]:
-        lastIndex = len(arr)-1
         i, j = 0, len(arr)-1
-        heap = []
-        heappush(heap, (arr[i]/arr[j], i, j))
+        heap = [(arr[i]/arr[j], i, j)]
+        count = 0
 
-        smallest = 1
         while heap:
-            _, i, j = heappop(heap)
-            if smallest == k:
+            fraction, i, j = heappop(heap)
+            count += 1
+            if count == k:
                 break
-            
             if j-1 > i:
                 heappush(heap, (arr[i]/arr[j-1], i, j-1))
-
-            if j == lastIndex and i+1 <= lastIndex:
+            if j == len(arr)-1 and i+1 < j:
                 heappush(heap, (arr[i+1]/arr[j], i+1, j))
             
-            smallest += 1
-
         return [arr[i], arr[j]]
 
 

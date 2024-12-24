@@ -43,21 +43,21 @@ from math import ceil
 
 
 class Solution:
-    def kthGrammar(self, N: int, K: int) -> int:
-        if K < 1 or K > 2**(N-1):
+    def kthGrammar(self, n: int, k: int) -> int:
+        if k < 1 or k > 2**(n-1):
             return -1
 
-        def kthGrammarRecursive(N, K):
-            if N == 1:
+        def recursive(n, k):
+            if n == 1:
                 return '0'
-            binary = kthGrammarRecursive(N-1, ceil(K/2))
-            index = 1 if K % 2 == 0 else 0
+            binary = recursive(n-1, ceil(k / 2))
+            index = 1 if k % 2 == 0 else 0
             if binary == '0':
                 return '01'[index]
             else:
-                return '10'[index] 
-
-        return kthGrammarRecursive(N, K)
+                return '10'[index]
+        
+        return int(recursive(n, k))
 
 
 s = Solution()

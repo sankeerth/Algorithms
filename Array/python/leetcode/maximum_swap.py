@@ -60,3 +60,8 @@ print(sol.maximumSwap(0))
 # Imp test cases
 print(sol.maximumSwap(9187))
 print(sol.maximumSwap(927883))
+print(sol.maximumSwap(321456))
+print(sol.maximumSwap(115))
+print(sol.maximumSwap(99098))
+
+

@@ -49,15 +49,12 @@ class BinaryMatrix(object):
 class Solution:
     def leftMostColumnWithOne(self, binaryMatrix: 'BinaryMatrix') -> int:
         rows, cols = binaryMatrix.dimensions()
-        row, col = 0, cols
-        
-        while row < rows:
-            num = binaryMatrix.get(row, col-1)
-            if num == 1:
-                col -= 1
-            else:
+        row, col = 0, cols-1
+
+        while row < rows and col >= 0:
+            if binaryMatrix.get(row, col) == 0:
                 row += 1
-            if col == 0:
-                return col
-            
-        return col if col < cols else -1
+            else:
+                col -= 1
+        
+        return col+1 if col != cols-1 else -1

@@ -23,6 +23,37 @@ from collections import Counter
 
 class Solution:
     def subarraySum(self, nums: List[int], k: int) -> int:
+        res, prefix = 0, 0
+        prefixSum = defaultdict(int)
+        prefixSum[0] = 1
+
+        for i in range(len(nums)):
+            prefix += nums[i]
+            if (prefix-k) in prefixSum:
+                res += prefixSum[prefix-k]
+            # this has to be after the above check else, it fails for [1], k=0
+            # because we add 0:1 to the map to account for 0s in the nums
+            prefixSum[prefix] += 1
+
+        return res
+
+
+sol = Solution()
+print(sol.subarraySum([1], 0)) # 0
+print(sol.subarraySum([1, 0], 0)) # 1
+print(sol.subarraySum([1,-2,1], 0)) # 1
+print(sol.subarraySum([1,1,1], 2)) # 2
+print(sol.subarraySum([1,2,3], 3)) # 2
+print(sol.subarraySum([1,-1,5,-2,3], 3)) # 3
+print(sol.subarraySum([-3,2,1,1,2], 3)) # 3
+print(sol.subarraySum([-3,2,1,1,2,1,2,-5,-4,7,3], 3)) # 9
+print(sol.subarraySum([1,2,1,2,1], 3)) # 4
+print(sol.subarraySum([11,1,-35,-99,75,-81,-97,16,-67,-53,429], 100)) # 1
+
+
+"""
+class Solution:
+    def subarraySum(self, nums: List[int], k: int) -> int:
         prefixSum = [0] * len(nums)
         prefixSum[0] = nums[0]
         
@@ -48,21 +79,6 @@ class Solution:
 
         return res
 
-
-sol = Solution()
-print(sol.subarraySum([1], 0)) # 0
-print(sol.subarraySum([1, 0], 0)) # 1
-print(sol.subarraySum([1,-2,1], 0)) # 1
-print(sol.subarraySum([1,1,1], 2)) # 2
-print(sol.subarraySum([1,2,3], 3)) # 2
-print(sol.subarraySum([1,-1,5,-2,3], 3)) # 3
-print(sol.subarraySum([-3,2,1,1,2], 3)) # 3
-print(sol.subarraySum([-3,2,1,1,2,1,2,-5,-4,7,3], 3)) # 9
-print(sol.subarraySum([1,2,1,2,1], 3)) # 4
-print(sol.subarraySum([11,1,-35,-99,75,-81,-97,16,-67,-53,429], 100)) # 1
-
-
-"""
 Another solution that stores prefixSum count on the fly. This is possible since subarrays 
 are counted only once corresponding to the prefix sum encountered.
 
@@ -75,23 +91,6 @@ class Solution:
             prefixSum += num
             if prefixSum == k:
                 res += 1
-            if (prefixSum - k) in prefixSumCount:
-                res += prefixSumCount[prefixSum-k]
-
-            prefixSumCount[prefixSum] += 1
-
-        return res
-
-Small modification to add '0' to dict
-
-class Solution:
-    def subarraySum(self, nums: List[int], k: int) -> int:
-        prefixSumCount = defaultdict(int)
-        res, prefixSum = 0, 0
-        prefixSumCount[0] = 1
-
-        for num in nums:
-            prefixSum += num
             if (prefixSum - k) in prefixSumCount:
                 res += prefixSumCount[prefixSum-k]
 

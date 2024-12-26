@@ -23,14 +23,18 @@ Very good white-board explanation of the solution with the need to store and add
 https://leetcode.com/problems/subarray-sums-divisible-by-k/discuss/413234/DETAILED-WHITEBOARD!-BEATS-100-(Do-you-really-want-to-understand-It)
 """
 class Solution:
-    def subarraysDivByK(self, A: List[int], K: int) -> int:
-        res = 0
-        prefix = 0
-        count = [1] + [0] * K
-        for a in A:
-            prefix = (prefix + a) % K
-            res += count[prefix]
-            count[prefix] += 1
+    def subarraysDivByK(self, nums: List[int], k: int) -> int:
+        res, prefix = 0, 0
+        prefixSum = defaultdict(int)
+        prefixSum[0] = 1
+
+        for i in range(len(nums)):
+            prefix = (prefix + nums[i]) % k
+            if prefix in prefixSum:
+                res += prefixSum[prefix]
+            # this has to be after the above check
+            prefixSum[prefix] += 1
+
         return res
 
 

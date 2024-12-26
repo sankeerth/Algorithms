@@ -43,36 +43,25 @@ from heapq import heappush, heappop
 
 class Solution:
     def smallestRange(self, nums: List[List[int]]) -> List[int]:
+        res = [float('-inf'), float('inf')]
         heap = []
-        for i, item in enumerate(nums):
-            num = item[0]
-            heappush(heap, (num, i, 0))
-
-        minRange, maxRange = heap[0][0], max(heap, key=lambda x: x[0])[0]
-        low, high = minRange, maxRange
+        maxE = float('-inf')
+        for i in range(len(nums)):
+            heappush(heap, (nums[i][0], i, 0))
+            maxE = max(maxE, nums[i][0])
 
         while heap:
-            _, row, index = heappop(heap)
-            if index+1 < len(nums[row]):
-                num = nums[row][index+1]
-                heappush(heap, (num, row, index+1))
-                
-                high = max(high, num)
+            minE, i, j = heappop(heap)
+            if maxE - minE < res[1] - res[0]:
+                res = [minE, maxE]
             # can be used to break out of loop sooner since num in other lists are in sorted order and only going to be greater
-            # Hence, it is not possible to find a smaller range than the one already found
-            #     low = heap[0][0] 
-            # else:
-            #     break
-
-            # to update the low only when there are nums from all k lists in heap.
-            # once one of the list is out of bounds, previously calculate low will stay for the remaining duration
-            if len(heap) == len(nums):
-                low = heap[0][0]
-
-            if high - low < maxRange - minRange:
-                minRange, maxRange = low, high
-
-        return [minRange, maxRange]
+            if j+1 >= len(nums[i]):
+                break
+            
+            maxE = max(maxE, nums[i][j+1])
+            heappush(heap, (nums[i][j+1], i, j+1))
+        
+        return res
 
 
 sol = Solution()

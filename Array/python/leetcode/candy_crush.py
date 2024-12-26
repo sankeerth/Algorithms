@@ -57,20 +57,20 @@ class Solution:
                     if board[i][j]:
                         board[idx][j] = board[i][j]
                         idx -= 1
-                for i in range(idx+1):
-                    board[i][j] = 0
+                while idx >= 0: # or for i in range(idx+1): board[i][j] = 0
+                    board[idx][j] = 0
+                    idx -= 1
 
-        # def fall():
-        #     for k in range(cols):
-        #         i, j = rows-1, rows-1
-        #         while j >= 0:
-        #             if board[j][k] != 0:
-        #                 board[i][k] = board[j][k]
-        #                 i -= 1
-        #             j -= 1
-        #         while i >= 0:
-        #             board[i][k] = 0
-        #             i -= 1
+        def drop():
+            for j in range(cols):
+                i, k = rows-1, rows-1
+                while k >= 0:
+                    if board[k][j] == 0:
+                        k -= 1
+                        continue
+                    board[i][j], board[k][j] = board[k][j], board[i][j]
+                    i -= 1
+                    k -= 1
 
         while True:
             candy = mark()

@@ -97,36 +97,70 @@ def deserialize(string):
 
 class Solution:
     def verticalOrder(self, root: TreeNode) -> List[List[int]]:
-        lefts, rights = [], []
-        rights.append([])
+        if not root:
+            return []
 
-        def verticalOrderRecursive(root, col, isLeft):
-            if root:
-                if isLeft:
-                    lefts.append([])
-                else:
-                    rights.append([])
+        nodesInCol = defaultdict(list)
+        queue = [(root, 0)]
+        minCol, maxCol = float('inf'), float('-inf')
+        res = []
+        
+        while queue:
+            root, col = queue.pop(0)
+            nodesInCol[col].append(root.val)
+            
+            minCol = min(minCol, col)
+            maxCol = max(maxCol, col)
 
-                verticalOrderRecursive(root.left, col-1, True)
-                if col <= 0:
-                    lefts[abs(col)].append(root.val)
-                else:
-                    rights[col].append(root.val)
-                verticalOrderRecursive(root.right, col+1, False)
+            if root.left:
+                queue.append((root.left, col-1))
+            if root.right:
+                queue.append((root.right, col+1))
 
-        verticalOrderRecursive(root, 0, True)
-        return lefts[::-1] + rights
+        for col in range(minCol, maxCol+1):
+            res.append(nodesInCol[col])
+
+        return res
 
 
 s = Solution()
-# print(s.verticalOrder(deserialize('[3,9,8,4,0,1,7]')))
-# print(s.verticalOrder(deserialize('[3,9,20,null,null,15,7]')))
+print(s.verticalOrder(deserialize('[3,9,8,4,0,1,7]')))
+print(s.verticalOrder(deserialize('[3,9,20,null,null,15,7]')))
 print(s.verticalOrder(deserialize('[3,9,8,4,0,1,7,null,11,null,2,5]')))
 
 """
-Another approach:
+DFS approach:
 
 Do all the nodes first with root as 0 and left is root-1 and right is root+1.
 Get the min (left most) and start again with root as abs(min) and add the nodes to the
 respective index in the result
+
+class Solution:
+    def verticalOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+        if not root:
+            return []
+
+        vLevels = defaultdict(list)
+        res = []
+
+        def dfs(root, ver, hor): # Need horizontal level here to ensure nodes are added from top to bottom
+            if root:
+                vLevels[ver].append((root.val, hor))
+                dfs(root.left, ver-1, hor+1)
+                dfs(root.right, ver+1, hor+1)
+
+        dfs(root, 0, 0)
+        maxLevel, minLevel = float('-inf'), float('inf')
+        for level in vLevels:
+            vLevels[level].sort(key=lambda x : x[1]) # TT for sorting req: [1,2,3,4,10,9,11,null,5,null,null,null,null,null,null,null,6]
+            maxLevel = max(maxLevel, level)
+            minLevel = min(minLevel, level)
+
+        for level in range(minLevel, maxLevel+1):
+            nodes = []
+            for node, _ in vLevels[level]:
+                nodes.append(node)
+            res.append(nodes)
+
+        return res
 """

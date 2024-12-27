@@ -52,3 +52,31 @@ sol = Solution()
 r = deserialize('[3,5,1,6,2,0,8,null,null,7,4]')
 print_levelorder_leetcode_style(sol.lowestCommonAncestor(r, r.left, r.left))
 print_levelorder_leetcode_style(sol.lowestCommonAncestor(r, r.left.left, r.left.right))
+
+
+"""
+Iterative using parent pointers:
+
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        queue, parent = [root], {root: None}
+        ancestors = set()
+
+        while p not in parent or q not in parent: # end traversal sooner
+            node = queue.pop()
+            if node.left:
+                queue.append(node.left)
+                parent[node.left] = node
+            if node.right:
+                queue.append(node.right)
+                parent[node.right] = node
+
+        while p:
+            ancestors.add(p)
+            p = parent[p]
+        
+        while q not in ancestors:
+            q = parent[q]
+
+        return q
+"""

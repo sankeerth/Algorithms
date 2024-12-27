@@ -28,6 +28,39 @@ from collections import defaultdict
 
 class Solution:
     def groupStrings(self, strings: List[str]) -> List[List[str]]:
+        res = defaultdict(list)
+
+        def generateHash(string):
+            f = string[0]
+            hash = ['a'] * len(string)
+            for i, c in enumerate(string):
+                h = chr(((ord(c)-ord(f)) % 26) + ord('a'))
+                hash[i] = h
+            return "".join(hash)
+        
+        for string in strings:
+            hash = generateHash(string)
+
+            res[hash].append(string)
+
+        return list(res.values())
+
+
+sol = Solution()
+print(sol.groupStrings(["abc","bcd","acef","xyz","az","ba","a","z"]))
+print(sol.groupStrings(["a"]))
+print(sol.groupStrings(["abc","bcd","acef","xyz","az","ba","a","z","aa","bb"]))
+print(sol.groupStrings(["abc","bcd","acef","xyz","az","ba","a","z","yza","zab"]))
+# failed testcases
+print(sol.groupStrings(["aa","bb","ccc"]))
+print(sol.groupStrings(["abc","bcd","acef","xyz","az","ba","a","z","al"]))
+
+
+"""
+My other solution but a little more complicated and error prone:
+
+class Solution:
+    def groupStrings(self, strings: List[str]) -> List[List[str]]:
         hashMap = defaultdict(list)
         for string in strings:
             if len(string) == 1:
@@ -46,13 +79,4 @@ class Solution:
             hashMap[key].append(string)
             
         return list(hashMap.values())
-
-
-sol = Solution()
-print(sol.groupStrings(["abc","bcd","acef","xyz","az","ba","a","z"]))
-print(sol.groupStrings(["a"]))
-print(sol.groupStrings(["abc","bcd","acef","xyz","az","ba","a","z","aa","bb"]))
-print(sol.groupStrings(["abc","bcd","acef","xyz","az","ba","a","z","yza","zab"]))
-# failed testcases
-print(sol.groupStrings(["aa","bb","ccc"]))
-print(sol.groupStrings(["abc","bcd","acef","xyz","az","ba","a","z","al"]))
+"""

@@ -16,26 +16,32 @@ from LinkedList.python.common.linked_list_operations import ListNode, build_link
 from heapq import heappush, heappop, heapify
 
 
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
 class Solution:
-    def mergeKLists(self, lists):
-        """
-        :type lists: List[ListNode]
-        :rtype: ListNode
-        """
-        # 2nd parameter in tuple is 'i' since 2nd parameter is used if 1st parameter (val) is same. If the 2nd parameter is of type ListNode,
-        # then an error is thrown since '<' (cmp) is not defined on the class.
-        heap = [(lists[i].val, i, lists[i]) for i in range(len(lists)) if lists[i]]
-        heapify(heap)
+    def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+        if not lists:
+            return None
 
-        head = ListNode(0)
-        temp = head
+        head = ListNode()
+        heap = []
+
+        for i, node in enumerate(lists):
+            # 2nd parameter in tuple is 'i' since 2nd parameter is used if 1st parameter (val) is same. If the 2nd parameter is of type ListNode,
+            # then an error is thrown since '<' (cmp) is not defined on the class.
+            if node:
+                heappush(heap, (node.val, i, node))
+
+        prev = head
         while heap:
-            top = heappop(heap)
-            node = top[2]
+            _, i, node = heappop(heap)
+            prev.next = node
             if node.next:
-                heappush(heap, (node.next.val, top[1], node.next))
-            temp.next = node
-            temp = temp.next
+                heappush(heap, (node.next.val, i, node.next))
+            prev = node
 
         return head.next
 

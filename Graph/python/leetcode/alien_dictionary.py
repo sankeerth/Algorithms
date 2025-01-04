@@ -41,16 +41,20 @@ class Solution:
                 inDegree[c] += 0
 
         for first, second in zip(words, words[1:]):
+            # alternate way to check if second word is a prefix of first word, ex: ["abc", "ab"]
+            # if len(first) > len(second) and first.startswith(second):
+            #    return ""
             for src, dest in zip(first, second):
                 if src != dest:
                     if dest not in adjList[src]:
                         adjList[src].add(dest)
                         inDegree[dest] += 1
+                    # other letters should be ignored since it does not affect relative ordering (ex: abacus and algorithm, because b > l, the gorithm and acus parts are unimportant for determining alphabetical ordering)
                     break
-                else:
-                    # check if second word is not a prefix of first word
-                    if len(second) < len(first):
-                        return ""
+            else: # can use else with a for loop (is executed only if for loop completes successfully without encountering the break)
+                # check if second word is not a prefix of first word, ex: ["abc", "ab"]
+                if len(second) < len(first):
+                    return ""
         
         for c in inDegree:
             if inDegree[c] == 0:

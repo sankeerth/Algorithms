@@ -35,11 +35,10 @@ Output: []
 
 Explanation: The endWord "cog" is not in wordList, therefore no possible transformation.
 """
-
-
 from collections import defaultdict
 
 
+# Both DFS and BFS are giving TLE, need to check the editorial solution
 class Solution(object):
     def findLadders(self, beginWord, endWord, wordList):
         """
@@ -105,3 +104,43 @@ class Solution(object):
 
 sol = Solution()
 print(sol.findLadders("hit", "cog", ["hot", "dot", "dog", "lot", "log", "cog"]))
+
+
+"""
+class Solution:
+    def findLadders(self, beginWord: str, endWord: str, wordList: List[str]) -> List[List[str]]:
+        seen = {beginWord}
+        wildcardMap = defaultdict(list)
+        queue = [(beginWord, [beginWord])]
+        res = []
+
+        def buildWildcardMap():
+            for word in wordList + [beginWord]:
+                for i in range(len(word)):
+                    wildcardWord = word[:i] + '*' + word[i+1:]
+                    wildcardMap[wildcardWord].append(word)
+        
+        buildWildcardMap()
+
+        while queue:
+            word1, ladder = queue.pop(0)
+            seen.add(word1)
+            if word1 == endWord:
+                if not res or len(ladder) <= len(res[-1]):
+                    res.append(ladder)
+                    continue
+                else:
+                    break
+
+            for i in range(len(word1)):
+                wildcardWord = word1[:i] + '*' + word1[i+1:]
+                if wildcardWord not in wildcardMap:
+                    continue
+                words = wildcardMap[wildcardWord]
+                for word2 in words:
+                    if word2 not in seen:
+                        queue.append((word2, ladder + [word2]))
+                        seen.add(word1)
+            
+        return res
+"""

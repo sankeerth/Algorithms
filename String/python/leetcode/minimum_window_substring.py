@@ -21,35 +21,36 @@ Constraints:
 
 Follow up: Could you find an algorithm that runs in O(m + n) time?
 """
-
-
 from collections import Counter
 
 
 class Solution:
     def minWindow(self, s: str, t: str) -> str:
         counter = Counter(t)
-        res, minimum = "", float('inf')
-        start, count = 0, len(t)
-        
-        for end, c in enumerate(s):
+        count = len(t)
+        i, j = 0, 0
+        start, end = 0, float('inf')
+
+        while j < len(s):
+            c = s[j]
             if c in counter:
                 if counter[c] > 0:
                     count -= 1
                 counter[c] -= 1
             
-            while count == 0 and start <= end:
-                c = s[start]
+            while count == 0 and i <= j:
+                if j-i < end-start:
+                    start, end = i, j
+                
+                c = s[i]
                 if c in counter:
                     counter[c] += 1
                     if counter[c] > 0:
                         count += 1
-                if end-start+1 < minimum:
-                    res = s[start:end+1]
-                    minimum = end-start+1
-                start += 1
+                i += 1
+            j += 1
 
-        return res
+        return s[start:end+1] if end != float('inf') else ""
 
 
 sol = Solution()

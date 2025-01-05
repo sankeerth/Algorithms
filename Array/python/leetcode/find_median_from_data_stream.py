@@ -39,40 +39,29 @@ class MedianFinder(object):
     """
 
     def __init__(self):
-        """
-        initialize your data structure here.
-        """
-        self.lower_half = list()  # max heap
-        self.upper_half = list()  # min heap
+        self.lowerHalf = [] # max heap
+        self.upperHalf = [] # min heap
 
-    def addNum(self, num):
-        """
-        :type num: int
-        :rtype: void
-        """
-        if len(self.lower_half) == 0 or num < -self.lower_half[0]:
-            heapq.heappush(self.lower_half, -num)
+    def addNum(self, num: int) -> None:
+        if self.upperHalf and num > self.upperHalf[0]:
+            heappush(self.upperHalf, num)
         else:
-            heapq.heappush(self.upper_half, num)
+            heappush(self.lowerHalf, -num)
 
-        if len(self.lower_half) > len(self.upper_half) + 1:
-            top = heapq.heappop(self.lower_half)
-            heapq.heappush(self.upper_half, -top)
-        elif len(self.upper_half) > len(self.lower_half) + 1:
-            top = heapq.heappop(self.upper_half)
-            heapq.heappush(self.lower_half, -top)
+        if len(self.upperHalf) - len(self.lowerHalf) > 1:
+            top = heappop(self.upperHalf)
+            heappush(self.lowerHalf, -top)
+        elif len(self.lowerHalf) - len(self.upperHalf) > 1:
+            top = heappop(self.lowerHalf)
+            heappush(self.upperHalf, -top)
 
-    def findMedian(self):
-        """
-        :rtype: float
-        """
-        if len(self.lower_half) == len(self.upper_half):
-            if len(self.lower_half) == 0:
-                return 0
-            else:
-                return (self.upper_half[0] - self.lower_half[0])/2
+    def findMedian(self) -> float:
+        if len(self.lowerHalf) > len(self.upperHalf):
+            return -self.lowerHalf[0]
+        elif len(self.upperHalf) > len(self.lowerHalf):
+            return self.upperHalf[0]
         else:
-            return (-self.lower_half[0]) if len(self.lower_half) > len(self.upper_half) else self.upper_half[0]
+            return (-self.lowerHalf[0] + self.upperHalf[0]) / 2
 
 
 med = MedianFinder()

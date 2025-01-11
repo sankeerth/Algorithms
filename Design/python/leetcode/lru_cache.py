@@ -36,72 +36,70 @@ At most 2 * 105 calls will be made to get and put.
 """
 
 
-class DoublyLinkedNode:
-    def __init__(self, key, value, prev=None, next=None):
+class Node:
+    def __init__(self, key=-1, value=-1):
         self.key = key
-        self.value = value
-        self.prev = prev
-        self.next = next
+        self.val = value
+        self.next = None
+        self.prev = None
 
-    def __repr__(self) -> str:
-        return 'Node({})'.format(self.key)
-
+    def __repr__(self):
+        return 'Prev({},{})->Node({},{})->Next({},{})'.format(self.prev.key, self.prev.val, self.key, self.val, self.next.key, self.next.val)
 
 class LRUCache:
+
     def __init__(self, capacity: int):
         self.capacity = capacity
-        self.size = 0
-        self.hashMap = {}
-
-        self.head = DoublyLinkedNode(-1, -1)
-        self.tail = DoublyLinkedNode(-1, -1)
+        self.nodes = {}
+        self.head = Node()
+        self.tail = Node()
         self.head.next = self.tail
         self.tail.prev = self.head
 
-    def _append(self, node: DoublyLinkedNode):
-        node.prev = self.head
-        node.next = self.head.next
-        self.head.next = node
-        node.next.prev = node
+    def _move(self, node):
+        self._split(node)
+        self._append(node)
 
-    def _remove(self, node):
-        node.prev.next = node.next
-        node.next.prev = node.prev
+    def _split(self, node):
+        prevnode, nextnode = node.prev, node.next
+        prevnode.next = nextnode
+        nextnode.prev = prevnode
 
-    def _pop(self):
-        if self.size <= 0:
-            return
-        last = self.tail.prev
-        self._remove(last)
+    def _append(self, node):
+        prevnode = self.tail.prev
+        
+        prevnode.next = node
+        node.prev = prevnode
+        node.next = self.tail
+        self.tail.prev = node
 
-        del self.hashMap[last.key]
-        del last
+    def _evict(self):
+        node = self.head.next
+        self._split(node)
+        del self.nodes[node.key]
+        del node
 
     def get(self, key: int) -> int:
-        if key not in self.hashMap:
+        if key not in self.nodes:
             return -1
+        
+        node = self.nodes[key]
+        self._move(node)
 
-        node = self.hashMap[key]
-        self._remove(node)
-        self._append(node)
-        return node.value
+        return node.val
 
     def put(self, key: int, value: int) -> None:
-        if key not in self.hashMap and self.size >= self.capacity:
-            self._pop()
-            self.size -= 1
-
-        node = None
-        if key in self.hashMap:
-            node = self.hashMap[key]
-            node.value = value
-            self._remove(node)
+        if key in self.nodes:
+            node = self.nodes[key]
+            node.val = value
+            self._move(node)
         else:
-            node = DoublyLinkedNode(key, value)
-            self.hashMap[key] = node
-            self.size += 1
+            node = Node(key, value)
+            self.nodes[key] = node
+            self._append(node)
 
-        self._append(node)
+        if len(self.nodes) > self.capacity:
+            self._evict()
 
 
 def execute(cmds, inputs):

@@ -51,8 +51,8 @@ Follow up: Could you do both operations in O(1) time complexity?
 from collections import defaultdict
 
 
-class DoublyLinkedNode:
-    def __init__(self, key, value, prev=None, next=None) -> None:
+class Node:
+    def __init__(self, key=-1, value=-1, prev=None, next=None):
         self.key = key
         self.value = value
         self.prev = prev
@@ -62,11 +62,10 @@ class DoublyLinkedNode:
     def __repr__(self) -> str:
         return 'Node({})'.format(self.key)
 
-
-class DoublyLinkedList:
-    def __init__(self) -> None:
-        self.head = DoublyLinkedNode(-1, -1)
-        self.tail = DoublyLinkedNode(-1, -1)
+class DLL:
+    def __init__(self):
+        self.head = Node()
+        self.tail = Node()
         self.head.next = self.tail
         self.tail.prev = self.head
         self.count = 0
@@ -79,76 +78,72 @@ class DoublyLinkedList:
             first = first.next
         return '->'.join(res[:-1])
 
-    def append(self, node: DoublyLinkedNode) -> None:
-        node.prev = self.head
-        node.next = self.head.next
+    def append(self, node: Node) -> None:
+        nextnode = self.head.next
         self.head.next = node
-        node.next.prev = node
+        node.prev = self.head
+        node.next = nextnode
+        nextnode.prev = node
         self.count += 1
 
-    def remove(self, node: DoublyLinkedNode) -> DoublyLinkedNode:
-        if self.count == 0:
-            return None
+    def remove(self, node: Node) -> Node:
+        if count == 0:
+            return node
         node.prev.next = node.next
         node.next.prev = node.prev
         self.count -= 1
         return node
 
-    def pop(self) -> DoublyLinkedNode:
-        last = self.tail.prev
-        return self.remove(last)
+    def pop(self) -> Node:
+        node = self.tail.prev
+        return self.remove(node)
 
-    def isEmpty(self) -> int:
-        if self.count == 0:
-            return True
-        return False
-
+    def empty(self) -> bool:
+        return self.count == 0
 
 class LFUCache:
+
     def __init__(self, capacity: int):
         self.capacity = capacity
-        self.freqMap = defaultdict(DoublyLinkedList)
-        self.cache = {}
         self.leastFreq = 1
+        self.nodes = {}
+        self.frequencies = defaultdict(DLL)
 
-    def update(self, node: DoublyLinkedNode) -> None:
-        dll = self.freqMap[node.freq]
+    def _update(self, node) -> None:
+        dll = self.frequencies[node.freq]
         _ = dll.remove(node)
-        # very important line that has caused a lot of pain debugging!
-        if dll.isEmpty() and self.freqMap[self.leastFreq].isEmpty():
+        if dll.empty() and node.freq == self.leastFreq:
             self.leastFreq += 1
-        
+
         node.freq += 1
-        dll = self.freqMap[node.freq]
+        dll = self.frequencies[node.freq]
         dll.append(node)
-    
+
     def get(self, key: int) -> int:
-        if key not in self.cache:
+        if key not in self.nodes:
             return -1
-        
-        node = self.cache[key]
-        self.update(node)
+        node = self.nodes[key]
+        self._update(node)
         return node.value
 
     def put(self, key: int, value: int) -> None:
-        if self.capacity <= 0:
+        if key in self.nodes:
+            node = self.nodes[key]
+            node.value = value
+            self._update(node)
             return
 
-        if key not in self.cache and len(self.cache) >= self.capacity:
-            dll = self.freqMap[self.leastFreq]
+        if len(self.nodes) >= self.capacity:
+            dll = self.frequencies[self.leastFreq]
             node = dll.pop()
-            del self.cache[node.key]
+            del self.nodes[node.key]
+            del node
 
-        if key in self.cache:
-            node = self.cache[key]
-            node.value = value
-            self.update(node)
-        else:
-            node = DoublyLinkedNode(key, value)
-            self.cache[key] = node
-            self.leastFreq = 1
-            dll = self.freqMap[self.leastFreq]
-            dll.append(node)
+        node = Node(key, value)
+        self.nodes[key] = node
+        dll = self.frequencies[node.freq]
+        self.leastFreq = 1
+        dll.append(node)
 
 
 def execute(cmds, inputs):

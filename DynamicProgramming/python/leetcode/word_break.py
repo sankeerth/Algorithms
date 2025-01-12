@@ -32,6 +32,41 @@ Constraints:
 from typing import List
 
 
+# Backward DP (easier)
+class Solution:
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+        wordset = set()
+        dp = [False] * (len(s)+1)
+        dp[-1] = True
+
+        for word in wordDict:
+            wordset.add(word)
+
+        for i in range(len(s)-1, -1, -1):
+            for j in range(i+1, len(s)+1):
+                prefix = s[i:j]
+                if prefix in wordset and dp[j]:
+                    dp[i] = True
+                    break
+
+        return dp[0]
+
+
+sol = Solution()
+print(sol.wordBreak("leetcode", ["leet","code", "leetco", "co", "de"]))
+print(sol.wordBreak("leetcode", ["leet","de", "leetcod"]))
+print(sol.wordBreak("aaaaaaaaaaaaaaaaaaaaaaaaaaaad", ["a","aa", "aaa", "aaaa", "aaaaa", "aaaaaa", "aaaaaaa", "aaaaaaaa", "aaaaaaaaa", "aaaaaaaaaa", "aaaaaaaaaaaaaa"]))
+print(sol.wordBreak("aaaad", ["a","aa", "aaa", "aaaa"]))
+print(sol.wordBreak("code", ["c", "od"]))
+print(sol.wordBreak("dba", ["d", "ab"]))
+print(sol.wordBreak("c", ["d", "a"]))
+print(sol.wordBreak("applepenapple", ["apple", "pen"]))
+print(sol.wordBreak("catsandogcat", ["cats","dog","sand","and","cat","an"]))
+
+
+"""
+# Forward DP:
+
 class Solution(object):
     def wordBreak(self, s: str, wordDict: List[str]) -> bool:
         wordSet = set()
@@ -50,22 +85,10 @@ class Solution(object):
                         break
 
         return dp[len(s)]
-
-
-sol = Solution()
-print(sol.wordBreak("leetcode", ["leet","code", "leetco", "co", "de"]))
-print(sol.wordBreak("leetcode", ["leet","de", "leetcod"]))
-print(sol.wordBreak("aaaaaaaaaaaaaaaaaaaaaaaaaaaad", ["a","aa", "aaa", "aaaa", "aaaaa", "aaaaaa", "aaaaaaa", "aaaaaaaa", "aaaaaaaaa", "aaaaaaaaaa", "aaaaaaaaaaaaaa"]))
-print(sol.wordBreak("aaaad", ["a","aa", "aaa", "aaaa"]))
-print(sol.wordBreak("code", ["c", "od"]))
-print(sol.wordBreak("dba", ["d", "ab"]))
-print(sol.wordBreak("c", ["d", "a"]))
-print(sol.wordBreak("applepenapple", ["apple", "pen"]))
-print(sol.wordBreak("catsandogcat", ["cats","dog","sand","and","cat","an"]))
-
+"""
 
 """
-Recursive solution:
+# Recursive solution:
 
 class Solution(object):
     def wordBreak(self, s: str, wordDict: List[str]) -> bool:

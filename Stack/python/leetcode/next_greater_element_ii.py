@@ -37,11 +37,6 @@ class Solution:
                 res[top] = nums[i]
             stack.append(i)
 
-        while stack:
-            top = stack.pop()
-            if stack and nums[stack[0]] > nums[top]:
-                res[top] = nums[stack[0]]
-
         return res[:len(nums)//2]
 
 

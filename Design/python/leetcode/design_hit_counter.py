@@ -37,28 +37,28 @@ Follow up: What if the number of hits per second could be huge? Does your design
 
 class HitCounter:
     def __init__(self):
-        """
-        Initialize your data structure here.
-        """
-        self.maxTimestamp = 300
-        self.hits = list()
+        self.hits = []
+        self.count = 0
+        self.time = 300
 
     def hit(self, timestamp: int) -> None:
-        """
-        Record a hit.
-        @param timestamp - The current timestamp (in seconds granularity).
-        """
-        self.hits.append(timestamp)
+        if self.hits and self.hits[-1][0] == timestamp:
+            self.hits[-1][1] += 1
+            self.count += 1
+            return
+
+        self.hits.append([timestamp, 1])
+        self.count += 1
 
     def getHits(self, timestamp: int) -> int:
-        """
-        Return the number of hits in the past 5 minutes.
-        @param timestamp - The current timestamp (in seconds granularity).
-        """
-        while self.hits and (timestamp - self.maxTimestamp) >= self.hits[0]:
+        while self.hits:
+            earliestTimestamp = self.hits[0][0]
+            if timestamp - earliestTimestamp < self.time:
+                break
+            self.count -= self.hits[0][1]
             self.hits.pop(0)
 
-        return len(self.hits)
+        return self.count
 
 
 def execute(cmds, inputs):
@@ -81,3 +81,33 @@ def execute(cmds, inputs):
 cmds = ["HitCounter","hit","hit","hit","getHits","hit","getHits","getHits"]
 inputs = [[],[1],[2],[3],[4],[300],[300],[301]]
 print(execute(cmds, inputs))
+
+
+"""
+Uses more memory since only timestamp is appended:
+
+class HitCounter:
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.maxTimestamp = 300
+        self.hits = list()
+
+    def hit(self, timestamp: int) -> None:
+        """
+        Record a hit.
+        @param timestamp - The current timestamp (in seconds granularity).
+        """
+        self.hits.append(timestamp)
+
+    def getHits(self, timestamp: int) -> int:
+        """
+        Return the number of hits in the past 5 minutes.
+        @param timestamp - The current timestamp (in seconds granularity).
+        """
+        while self.hits and (timestamp - self.maxTimestamp) >= self.hits[0]:
+            self.hits.pop(0)
+
+        return len(self.hits)
+"""
